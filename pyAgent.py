@@ -44,9 +44,9 @@ class Agent:
         # function for setting the current y position of the agent
         self.y = position
 
-    def create_agent(tpm, cm, brain_activity, fitness = 0., task = None, id_label = None):
+    def create_agent(tpm, cm, brain_activity, fitness = 0., task = None, id_label = None, params = {}):
 
-        agent = Agent({})
+        agent = Agent(params)
         agent.save_brain(tpm, cm)
         agent.save_brain_activity(brain_activity)
         agent.save_task(task)

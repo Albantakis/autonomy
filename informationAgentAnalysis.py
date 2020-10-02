@@ -10,6 +10,7 @@ from utils import *
 
 # Todo: 
 # - Autonomy A_m (Bertschiger 2008)
+# - causal closure (NTIC)
 # - Respresentation R (see Hintze et al., 2018 for latest application)
 # - Make function that evaluates all measures and outputs pd.dataframe row
 
