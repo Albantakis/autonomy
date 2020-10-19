@@ -1,8 +1,11 @@
 import numpy as np
 import networkx as nx
 import copy
+from matplotlib import pyplot as plt
+import matplotlib.animation as animation
 
-#from matplotlib import pyplot as plt
+from pyBlockEnvironment import *
+from utils import *
 
 def plot_animat_brain(cm, graph=None, state=None, ax=None):
     '''
@@ -66,3 +69,128 @@ def plot_animat_brain(cm, graph=None, state=None, ax=None):
 #     fig, ax = plt.subplots(1,1, figsize=(4,6))
     nx.draw(graph, with_labels=True, node_size=800, node_color=node_colors,
     edgecolors='#000000', linewidths=linewidths, pos=pos, ax=ax)
+
+
+def plot_timestep(agent, world, trial, t, block_patterns = None):
+
+    '''
+    Function description
+        Inputs:
+            inputs:
+        Outputs:
+            outputs:
+    '''
+
+    # PLOT SCREEN
+    fullgame_history = world.get_fullgame_history(block_patterns = block_patterns)
+
+    _, block = world._get_initial_condition(trial)
+    
+    wins = world.wins
+
+    n_cols = 3
+    n_rows = 18 
+    col = 0
+
+    plt.subplot2grid((n_rows,n_cols),(0,col),rowspan=18, colspan=1)
+    col+=1
+
+    plt.imshow(fullgame_history[trial,t,:,:],cmap=plt.cm.binary);
+    plt.xlabel('x'); plt.ylabel('y')
+    win = 'WON' if wins[trial] else 'LOST'
+    direction = '━▶' if block.direction=='right' else '◀━'
+    plt.title('Game - Trial: {}, {}, {}, {}'.format(block.size,block.type,direction,win))
+
+    state = get_state_tuple(agent, trial, t)
+    plt.subplot2grid((n_rows,n_cols),(0,col),rowspan=17,colspan=2)
+    agent.plot_brain(state)
+
+    plt.subplot2grid((n_rows,n_cols),(17,col), rowspan = 1, colspan = 2)
+    plt.imshow(np.array(state)[np.newaxis,:],cmap=plt.cm.binary)
+    plt.yticks([])
+    plt.xticks(range(agent.n_nodes),agent.node_labels)
+
+
+def plot_trial_cumulative(agent, world, trial):
+
+    world.agent =  copy.copy(agent)
+
+    Wagent, block = world._get_initial_condition(trial)  
+    total_time = world.height # 35 time steps, 34 updates
+    motor_activity = agent.get_motor_activity(trial)
+
+    compressed_block_screen = []
+    compressed_agent_screen = []
+
+    ScreenAgent = Screen(world.width, world.height)
+    ScreenBlock = Screen(world.width, world.height)
+
+    Wagent.set_y = 0
+    Wagent.set_x = trial % world.width
+
+    ScreenAgent.drawAgent_cumulative(Wagent)
+    ScreenBlock.drawBlock_cumulative(block) 
+
+    print([Wagent.x, Wagent.y])
+    
+    for t in range(1, total_time):
+            Wagent.x = ScreenAgent.wrapper(Wagent.x + motor_activity[t])
+
+            if t<total_time:
+                if block.direction == 'right':
+                    block.x = ScreenBlock.wrapper(block.x + 1)
+                else:
+                    block.x = ScreenBlock.wrapper(block.x - 1)
+
+                Wagent.y = Wagent.y + 1
+                block.y = block.y + 1
+            
+            ScreenAgent.drawAgent_cumulative(Wagent)
+            ScreenBlock.drawBlock_cumulative(block) 
+
+    n_cols = 4
+    n_rows = 1 
+    col = 0
+
+    plt.subplot2grid((n_rows,n_cols),(0,col),rowspan=1, colspan=1)
+    col+=1
+
+    # plot block
+    plt.imshow(ScreenBlock.screen,cmap=plt.cm.binary);
+    plt.xlabel('x'); plt.ylabel('y')
+    win = 'WON' if world._check_win(block, agent) else 'LOST'
+    direction = '━▶' if block.direction=='right' else '◀━'
+    plt.title('Game - Trial: {}, {}, {}, {}'.format(block.size,block.type,direction,win))
+
+    # plot bot positions
+    plt.subplot2grid((n_rows,n_cols),(0,col),rowspan=1, colspan=1)
+    col+=1
+    plt.imshow(ScreenAgent.screen,cmap=plt.cm.binary);
+    plt.xlabel('x'); plt.ylabel('y')
+
+    # plot bot positions
+    plt.subplot2grid((n_rows,n_cols),(0,col),rowspan=1, colspan=1)
+    col+=1
+    plt.imshow(ScreenAgent.screen + 2*ScreenBlock.screen,cmap=plt.cm.magma);
+    plt.xlabel('x'); plt.ylabel('y')
+
+    # plot states
+    plt.subplot2grid((n_rows,n_cols),(0,col),rowspan=1, colspan=1)
+    col+=1
+    plt.imshow(agent.brain_activity[trial], cmap=plt.cm.binary)
+    plt.yticks([])
+    plt.xticks(range(agent.n_nodes),agent.node_labels)
+
+
+# ----------------- Animations ------------------------------------------
+
+def plot_trial_animation(agent, world, trial, block_patterns = None):
+    
+    ims = []
+    for t in range(world.height):
+        im = t
+
+
+    anim = FuncAnimation(fig, animate, fargs = (line), frames = world.height, interval = 200)
+    
+    return anim

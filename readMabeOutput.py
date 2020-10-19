@@ -51,7 +51,3 @@ def getBrainActivity(data, n_agents=121, n_trials=128, n_nodes=8, n_sensors=2,n_
                 brain_activity[a,i,j,:] = nodes
     return brain_activity
 
-def get_genome(genomes, run, agent):
-    genome = genomes[run]['GENOME_root::_sites'][agent]
-    genome = np.squeeze(np.array(np.matrix(genome)))
-    return genome

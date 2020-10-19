@@ -4,6 +4,7 @@ import networkx as nx
 
 from plotting import *
 from utils import *
+from structuralAgentAnalysis import *
 
 class Agent:
     '''
@@ -96,12 +97,13 @@ class Agent:
         self.TPM = TPM
         self.cm = cm
         self.connected_nodes = sum(np.sum(cm,0)*np.sum(cm,1)>0)
-
+        
         # defining a graph object based on the connectivity using networkx
         G = nx.from_numpy_matrix(cm, create_using=nx.DiGraph())
         mapping = {key:x for key,x in zip(range(self.n_nodes),node_labels)}
         G = nx.relabel_nodes(G, mapping)
         self.brain_graph = G
+        self.len_LSCC = len_LSCC(G)
 
         # saving the labels and indices of sensors, motors, and hidden to animats
         self.node_labels = node_labels
@@ -124,6 +126,28 @@ class Agent:
         self.brain_activity = np.array(brain_activity).astype(int)
         self.n_trials = brain_activity.shape[0]
         self.n_timesteps = brain_activity.shape[1]
+
+    def get_motor_activity(self, trial):
+        '''
+        Function for getting the motor activity from a system's activity
+        ### THIS FUNCTION ONLY WORKS FOR SYSTEMS WITH TWO SENSORS ###
+            Inputs:
+                trial: int, the trial number under investigation
+            Outputs:
+                motor_activity: list of movements made by the animat in a trial
+        '''
+        trial_activity = self.brain_activity[trial]
+        motor_states = trial_activity[:, self.motor_ixs]
+        motor_activity = []
+        for state in motor_states:
+            state = list(state)
+            if state==[0,0] or state==[1,1]:
+                motor_activity.append(0)
+            elif state==[1,0]:
+                motor_activity.append(1)
+            else: # state==[0,1]
+                motor_activity.append(-1)
+        return motor_activity
 
 # -------------------- PLOTTING --------------------------------------
 

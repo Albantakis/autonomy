@@ -42,6 +42,24 @@ def num2state(num,n_nodes,convention='loli'):
     else:
         return state
 
+
+def get_state_tuple(agent, trial, t):
+        '''
+        Function for picking out a specific state of the system.
+         Inputs:
+             trial: the trial number that is under investigation (int)
+             t: the timestep you wish to find the transition to (int)
+         Outputs:
+             two tuples (X and Y in Albantakis et al 2019) containing the state of the system at time t-1 and t.
+        '''
+        # Checking if brain activity exists
+        if not hasattr(agent, 'brain_activity'):
+            raise AttributeError('No brain activity saved yet.')
+
+        # return state as a tuple (can be used for calculating Phi)
+        return tuple(agent.brain_activity[trial, t].astype(int))
+
+
 # TODO: For Sensors I actually only have to exclude the last, for motors only the first.
 def get_unique_states(brain_activity, trial= None, exclude_first_last = True, node_indices = None, return_counts = False):
     '''
