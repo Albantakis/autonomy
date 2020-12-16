@@ -1,0 +1,19 @@
+# Parameters for catch 3+6, avoid 4+5 Block Catching MABE environment, simulated with Pyanimats
+
+# ------------ Agent -----------
+n_sensors: 2
+n_hidden: 4
+n_motors: 2
+
+sensor_ixs: [0,1]
+motor_ixs: [6,7]
+
+pheno_length: 3
+pheno_sensor_pos: [0,2]
+
+# # ------------ World -----------
+# environment:
+# 	blocks: 3
+# 	height: 35
+# 	width: 16
+# 	n_trials: 2*width*len(blocks)
