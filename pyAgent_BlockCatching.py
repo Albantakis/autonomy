@@ -1,86 +1,37 @@
 import pyphi
 import numpy as np
 import networkx as nx
-import yaml
-from pathlib import Path
 
 from plotting import *
 from utils import *
 from structuralAgentAnalysis import *
 
-### This is the general agent object based on a TPM and CM and nothing else necessary. However, it should be possible to give other useful parameters
-
 class Agent:
-    """
-    Represents an agent.
+    '''
+    This class contains functions concerning the agent to be analyzed
+    '''
 
-    Args:
-        tpm (np.ndarray):
-            The agent's 2-D transition probability matrix.
-        
-    Keyword Args: 
-        cm (np.ndarray):
-            The agent's connectivity matrix.
-        experiment (Experiment): 
-            The experiment the agent was evolved to.
-        
-    Attributes:
-        sensor_ixs (list): Indices of Sensors in TPM 
-        motor_ixs (list): Indices of Motors in TPM
-        hidden_ixs (list): Indices of Motors in TPM
-        tpm
-        cm
-        fitness
-
-    Possible Attribute:
-
-        ...
-    """
-
-    def __init__(self, tpm, cm = False, agent_params = False, activity = False):
+    def __init__(self, params):
         '''
-        Called by pyAgents.Agent(...)
+        Function for initializing the agent.
+        Called by pyAgents.Agent(params)
+            Inputs:
+                params: a dictionary containing the defining parameters of the agent. The minimal input is {}
+            Outputs:
+                updates the agent object (self) directly
+        '''
 
-        Keyword Args:
-            agent_params: either string that leads to yml file with parameters or dictionary of parameters.
-        ''' 
-        if agent_params:
-            self._get_agent_params(agent_params)
-        
-        # TODO: everything hast to come after get_agent_params or it is overwritten. Fix.
-        self.tpm = tpm
-        self.cm = cm
-        
-        self.activity = activity
-        self.n_nodes = len(tpm[1])
-
-        # TODO: Test that TPM dimsensions and sensor, motor indices, num nodes all fit together
-
-    def _get_agent_params(self, agent_params):
-        print(agent_params)
-        path = str(Path(__file__).parent) + "/Phenotypes/" + agent_params + '.yml'
-        print(path)
-        if isinstance(agent_params, str):
-            try: 
-                version = [int(x) for x in yaml.__version__.split('.')]
-                version_float = version[0] + 0.1*version[1]
-                if version_float < 5.1: #For Pyanimats environment
-                    with open(path, 'rt') as f:
-                        params = yaml.load(f)
-                else:
-                    with open(path, 'rt') as f:
-                        params = yaml.full_load(f)
-                print(params)
-            except FileNotFoundError:
-                print("No parameter file to load.")
-        else:
-            params = agent_params
-
-        self.__dict__ = params
-       
-
-    def infer_cm(self):
-        pyphi.infer_cm(self.tpm)
+        # checking if params contains the right keys, else using standard values
+        self.n_left_sensors = params['nrOfLeftSensors'] if 'nrOfLeftSensors' in params else 1
+        self.n_right_sensors = params['nrOfRightSensors'] if 'nrOfRightSensors' in params else 1
+        self.n_hidden = params['hiddenNodes'] if 'hiddenNodes' in params else 4
+        self.n_motors = params['motorNodes'] if 'motorNodes' in params else 2
+        self.gapwidth = params['gapWidth'] if 'gapWidth' in params else 1
+        self.n_sensors = self.n_right_sensors + self.n_left_sensors
+        self.n_nodes = self.n_sensors + self.n_hidden + self.n_motors
+        self.length = self.n_left_sensors  + self.gapwidth + self.n_right_sensors
+        self.x = params['x'] if 'x' in params else 0
+        self.y = params['y'] if 'y' in params else 0
 
     def __len__(self):
         # size of agent in world
@@ -175,6 +126,28 @@ class Agent:
         self.brain_activity = np.array(brain_activity).astype(int)
         self.n_trials = brain_activity.shape[0]
         self.n_timesteps = brain_activity.shape[1]
+
+    def get_motor_activity(self, trial):
+        '''
+        Function for getting the motor activity from a system's activity
+        ### THIS FUNCTION ONLY WORKS FOR SYSTEMS WITH TWO SENSORS ###
+            Inputs:
+                trial: int, the trial number under investigation
+            Outputs:
+                motor_activity: list of movements made by the animat in a trial
+        '''
+        trial_activity = self.brain_activity[trial]
+        motor_states = trial_activity[:, self.motor_ixs]
+        motor_activity = []
+        for state in motor_states:
+            state = list(state)
+            if state==[0,0] or state==[1,1]:
+                motor_activity.append(0)
+            elif state==[1,0]:
+                motor_activity.append(1)
+            else: # state==[0,1]
+                motor_activity.append(-1)
+        return motor_activity
 
 # -------------------- PLOTTING --------------------------------------
 

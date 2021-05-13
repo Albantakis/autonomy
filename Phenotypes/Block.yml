@@ -1,17 +1,20 @@
 # Parameters for catch 3+6, avoid 4+5 Block Catching MABE environment, simulated with LAmabe
 
 # ------------ Agent -----------
+task: 'task1_c1a3'
+
 n_sensors: 2
-n_hidden: 4
 n_motors: 2
+n_hidden: 4
 
 sensor_ixs: [0,1]
 motor_ixs: [2,3]
-
-pheno_length: 3
-pheno_sensor_pos: [0,2]
+hidden_ixs: [4,5,6,7]
 
 # # ------------ World -----------
+# pheno_length: 3
+# pheno_sensor_pos: [0,2]
+
 # environment:
 # 	blocks: 3
 # 	height: 35

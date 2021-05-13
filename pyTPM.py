@@ -38,6 +38,7 @@ def genome2TPM(genome, n_nodes=8, n_sensors=2, n_motors=2, gate_type='determinis
         # max_gene_length = 300
         max_gene_length = 12 + (2**max_inputs)*max_outputs + 1 # = 77
         start_codon = 43
+        print(start_codon)
 
     elif gate_type=='decomposable':
         # max_gene_length = 400

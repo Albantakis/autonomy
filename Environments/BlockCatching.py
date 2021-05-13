@@ -47,7 +47,7 @@ class Game_Agent:
 	def get_motor_activity(self):
 		# How the motor state is interpreted in the game
 		motor_state = list(self.state[self.motor_ixs]) # has to be list for comparison below
-		print('motor_ixs: ', self.motor_ixs)
+		#print('motor_ixs: ', self.motor_ixs)
 		motor_activity = 0
 		if motor_state==[1,0]:
 				motor_activity = 1
@@ -76,8 +76,8 @@ class Block_World:
 		world_section = np.zeros(self.width)
 		block_pos = self.wrapper(range(block.x, block.x+block.size))
 		world_section[block_pos] = 1
-		print('final world: ', world_section)
-		print('final_agent: ', agent_position)
+		# print('final world: ', world_section)
+		# print('final_agent: ', agent_position)
 		overlap = sum(world_section[agent_position])
 		
 		if overlap > 0:
@@ -95,10 +95,10 @@ class Block_World:
 		#print(game_agent.state)
 
 		game_agent.update_agent_state()
-		print(game_agent.state)
+		#print(game_agent.state)
 
 		game_agent.x = self.wrapper(game_agent.x + game_agent.get_motor_activity())
-		print(game_agent.x)
+		#print(game_agent.x)
 
 
 	def _get_initial_conditions_from_trial_num(self, trial, agent):
@@ -125,7 +125,7 @@ class Block_World:
 		hit = False
 		win = False
 
-		print(['game_agent: ', game_agent.x])
+		#print(['game_agent: ', game_agent.x])
 
 		while block.y < total_time:
 			
@@ -133,7 +133,7 @@ class Block_World:
 			block_pos = self.wrapper(range(block.x, block.x+block.size))
 			world_section[block_pos] = 1
 			# print(['block: ', block.x])
-			# print(world_section)
+			#print(world_section)
 			# print('t: ', block.y)
 			self._update_agent_position(game_agent, world_section)
 			
@@ -153,7 +153,7 @@ class Block_World:
 			game_agent.current_score += 1
 			win = True
 
-		print(['hit: ', hit, 'win: ', win, 'block: ', block.x, 'agent: ', game_agent.x])
+		#print(['hit: ', hit, 'win: ', win, 'block: ', block.x, 'agent: ', game_agent.x])
 
 		return game_agent, win
 

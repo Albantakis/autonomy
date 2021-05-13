@@ -36,3 +36,5 @@ def sum_of_small_phi():
 def main_complex():
 
 def average_Phi():
+	    # defining the network using pyphi
+        network = pyphi.Network(TPM, cm, node_labels=node_labels)

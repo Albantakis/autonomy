@@ -2,6 +2,8 @@
 import numpy as np
 import pyphi
 import networkx as nx
+import copy
+
 
 #####################################################################################################################
 ### Collection of functions to assess the structural properties of an agent based on its connectivity matrix (cm) ###
@@ -10,7 +12,7 @@ import networkx as nx
 
 # Todo: 
 
-# - Make function that evaluates all measures and outputs pd.dataframe row
+# - Make function that evaluates all measures and outputs pd.dataframe row (from agent object as input)
 # - spectral density (Banerjee and Jost, 2009)?
 # - density of connections and weight distributions (the latter for ANNs)
 
@@ -25,11 +27,19 @@ def number_of_connected_sensors(cm,n_sensors):
 def number_of_connected_motors(cm,n_sensors,n_motors):
     return np.sum(np.sum(cm[:,n_sensors:n_sensors+n_motors],0)>0)
 
-def number_of_densely_connected_nodes(cm,allow_self_loops=False):
+def number_of_densely_connected_nodes(cm_agent,allow_self_loops=False):
+    cm = copy.copy(cm_agent)
     if not allow_self_loops:
         for i in range(len(cm)):
             cm[i,i] = 0
-            return np.sum((np.sum(cm,0)*np.sum(cm,1))>0)
+    return np.sum((np.sum(cm,0)*np.sum(cm,1))>0)
+
+def densely_connected_nodes(cm_agent,allow_self_loops=False):
+    cm = copy.copy(cm_agent)
+    if not allow_self_loops:
+        for i in range(len(cm)):
+            cm[i,i] = 0
+    return np.where((np.sum(cm,0)*np.sum(cm,1))>0)[0]
 
 def number_of_sensor_hidden_connections(cm,n_sensors,n_motors):
     return np.sum(cm[:n_sensors,n_sensors+n_motors:]>0)

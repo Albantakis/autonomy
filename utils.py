@@ -1,4 +1,5 @@
 import numpy as np
+import networkx as nx
 
 ## Todo: Assumes binary
 def state2num(state,convention='loli'):
@@ -41,6 +42,38 @@ def num2state(num,n_nodes,convention='loli'):
         return state
     else:
         return state
+
+def get_node_labels(agent):
+    node_labels = []
+
+    # standard labels for up to 10 nodes of each kind
+    sensor_labels = ['S1','S2','S3','S4','S5','S6','S7','S8','S9','S10']
+    motor_labels = ['M1','M2','M3','M4','M5','M6','M7','M8','M9','M10']
+    hidden_labels = ['A','B','C','D','E','F','G','H','I','J']
+
+    # defining labels for each node type
+    s = [sensor_labels[i] for i in list(range(agent.n_sensors))]
+    m = [motor_labels[i] for i in list(range(agent.n_motors))]
+    h = [hidden_labels[i] for i in list(range(agent.n_hidden))]
+
+   # combining the labels
+    node_labels.extend(s)
+    node_labels.extend(m)
+    node_labels.extend(h)
+
+    #sort node labels according to idx
+    indices = agent.sensor_ixs + agent.motor_ixs + agent.hidden_ixs 
+    node_labels = [node_labels[i] for i in indices]
+
+    return node_labels
+
+def get_graph(agent):
+    # defining a graph object based on the connectivity using networkx
+    G = nx.from_numpy_matrix(agent.cm, create_using=nx.DiGraph())
+    node_labels = get_node_labels(agent)
+    mapping = {key:x for key,x in zip(range(agent.n_nodes),node_labels)}
+    G = nx.relabel_nodes(G, mapping)
+    return G
 
 
 def get_state_tuple(agent, trial, t):
