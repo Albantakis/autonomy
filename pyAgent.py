@@ -97,7 +97,6 @@ class Agent:
     def plot_brain(self, state=None, ax=None):
         '''
         Function for plotting the brain of an animat.
-        ### THIS FUNCTION ONLY WORKS WELL FOR ANIMATS WITH 7 or 8 NODES (2+2+4) ###
             Inputs:
                 state: the state of the animat for plotting (alters colors to indicate activity)
                 ax: for specifying which axes the graph should be plotted on
