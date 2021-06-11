@@ -6,6 +6,6 @@ n_motors: 3
 n_hidden: 4
 
 sensor_ixs: [4,5,6,7]
-motor_ixs: [8,9]
+motor_ixs: [8,9,10]
 hidden_ixs: [0,1,2,3]
 

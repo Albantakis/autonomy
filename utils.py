@@ -1,5 +1,6 @@
 import numpy as np
 import networkx as nx
+from copy import copy
 
 ## Todo: Assumes binary
 def state2num(state,convention='loli'):
@@ -62,10 +63,12 @@ def get_node_labels(agent):
     node_labels.extend(h)
 
     #sort node labels according to idx
-    indices = agent.sensor_ixs + agent.motor_ixs + agent.hidden_ixs 
-    node_labels = [node_labels[i] for i in indices]
-
-    return node_labels
+    indices = agent.sensor_ixs + agent.motor_ixs + agent.hidden_ixs
+    node_labels_ordered = copy(node_labels)
+    for n, i in enumerate(indices):
+        node_labels_ordered[i] = node_labels[n]
+    
+    return node_labels_ordered
 
 def get_graph(agent):
     # defining a graph object based on the connectivity using networkx

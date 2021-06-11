@@ -50,14 +50,23 @@ def plot_animat_brain(agent, state=None, ax=None):
         G.nodes[n]['subset'] = subset_type[c]
 
     pos = nx.drawing.layout.multipartite_layout(G, align = 'horizontal')
+    print(pos)
 
     diff_x = 0.5
+    if len(agent.sensor_ixs) > 2:
+        for c, n in enumerate(node_labels[agent.sensor_ixs]):
+            (x, y) = pos[n]
+            if (c+1)%2 == 0:
+                pos[n] = (diff_x - int(c/2) - diff_x/2, y)
+            else:
+                pos[n] = (diff_x - int(c/2) + diff_x/2, y)
+
     for c, n in enumerate(node_labels[agent.hidden_ixs]):
         (x, y) = pos[n]
         if ((c+1)%2) == 1: 
-            pos[n] = (x + (int(c/4)+1) * diff_x, y)
+            pos[n] = (x + (int(c/4)+1) * diff_x*1.2, y)
         else: 
-            pos[n] = (x - (int(c/4)+1) * diff_x, y)
+            pos[n] = (x - (int(c/4)+1) * diff_x*1.2, y)
         
     flipped_pos = {node: (-x,-y) for (node, (x,y)) in pos.items()}
     
