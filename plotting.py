@@ -50,7 +50,6 @@ def plot_animat_brain(agent, state=None, ax=None):
         G.nodes[n]['subset'] = subset_type[c]
 
     pos = nx.drawing.layout.multipartite_layout(G, align = 'horizontal')
-    print(pos)
 
     diff_x = 0.5
     if len(agent.sensor_ixs) > 2:
