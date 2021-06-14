@@ -91,6 +91,10 @@ class Agent:
 
     def _infer_cm(self):
         return pyphi.tpm.infer_cm(pyphi.convert.to_multidimensional(self.tpm))
+
+    def LSCC(self):
+        G = get_graph(self)
+        return LSCC(G)
     
 # -------------------- PLOTTING --------------------------------------
 

@@ -35,6 +35,7 @@ def number_of_densely_connected_nodes(cm_agent,allow_self_loops=False):
     return np.sum((np.sum(cm,0)*np.sum(cm,1))>0)
 
 def densely_connected_nodes(cm_agent,allow_self_loops=False):
+    # Hidden nodes with inputs and outputs
     cm = copy.copy(cm_agent)
     if not allow_self_loops:
         for i in range(len(cm)):
@@ -55,7 +56,11 @@ def number_of_hidden_motor_connections(cm,n_sensors,n_motors):
 
 # largest strongly connected component using networkx graph
 def LSCC(G):
-    return max(nx.strongly_connected_components(G), key=len)
+    LSCC = max(nx.strongly_connected_components(G), key=len)
+    if len(LSCC) < 2:
+        return None
+    else:
+        return LSCC
 
 def len_LSCC(G):
     LSCC = max(nx.strongly_connected_components(G), key=len)
