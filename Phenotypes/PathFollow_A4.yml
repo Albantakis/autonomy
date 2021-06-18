@@ -1,0 +1,11 @@
+# Parameters for PathFollow MABE environment, simulated with Cliff's Code
+
+# ------------ Agent -----------
+n_sensors: 5
+n_motors: 3
+n_hidden: 4
+
+sensor_ixs: [4,5,6,7,8]
+motor_ixs: [9,10,11]
+hidden_ixs: [0,1,2,3]
+
