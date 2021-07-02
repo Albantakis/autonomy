@@ -27,7 +27,6 @@ def plot_animat_brain(agent, state=None, ax=None):
     node_colors = [colors[state[i],node_type[i]] for i in range(n_nodes)]
     node_labels = np.array(G.nodes)
 
-    # Todo: gray out hidden nodes that do not have inputs or outputs
     connected_nodes = list(densely_connected_nodes(agent.cm)) + agent.motor_ixs + agent.sensor_ixs
     node_colors = [node_colors[i] if i in connected_nodes else colors[state[i],3] for i in range(n_nodes)]
 

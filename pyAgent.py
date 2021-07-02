@@ -5,7 +5,6 @@ from pathlib import Path
 
 from plotting import *
 from utils import *
-from structuralAgentAnalysis import *
 
 ### This is the general agent object based on a TPM and (inferred) CM and nothing else necessary. 
 
@@ -108,4 +107,4 @@ class Agent:
             Outputs:
                 no output, just calls plotting.py function for plotting
         '''
-        plot_animat_brain(self.brain.cm, state, ax)
+        plot_animat_brain(self, state=state, ax=ax)
