@@ -103,12 +103,20 @@ def LSCC(G):
         return LSCC
 
 def len_LSCC(G):
-    LSCC = max(nx.strongly_connected_components(G), key=len)
-    return len(LSCC)
+    if len(G) > 0:
+        LSCC = max(nx.strongly_connected_components(G), key=len)
+        len_LSCC = len(LSCC)
+    else:
+        len_LSCC = 0
+    return len_LSCC
 
 def len_LWCC(G):
-    LWCC = max(nx.weakly_connected_components(G), key=len)
-    return len(LWCC)
+    if len(G) > 0:
+        LWCC = max(nx.weakly_connected_components(G), key=len)
+        len_LWCC = len(LWCC)
+    else:
+        len_LWCC = 0
+    return len_LWCC
 
 def average_betweenness_centrality(G, connected_only = True):
     # Betweenness centrality of a node v is the sum of the fraction of all-pairs 
@@ -134,21 +142,34 @@ def average_degree_centrality(G, connected_only = True):
 def fullStructuralAnalysis(agent, connected_only = True):
     df = number_of_connected_nodes_by_type(agent)
     df = df.join(number_of_connections_by_type(agent, connected_only = connected_only))
+
     # Components
     if connected_only == True:
         ind_con = connected_nodes(agent)
-        cm_connected = agent.cm[np.ix_(ind_con, ind_con)]
-        G = nx.from_numpy_matrix(cm_connected, create_using=nx.DiGraph())
+        if len(ind_con) > 0:
+            cm_connected = agent.cm[np.ix_(ind_con, ind_con)]
+            G = nx.from_numpy_matrix(cm_connected, create_using=nx.DiGraph())
+        else: 
+            G = nx.empty_graph(n=0, create_using=nx.DiGraph())
     else:
         G = get_graph(agent)
 
-    components = {
-        'len_LSCC': len_LSCC(G),
-        'len_LWCC': len_LWCC(G),
-        'flow_hierarchy': flow_hierarchy(G), #Flow hierarchy is defined as the fraction of edges not participating in cycles in a directed graph
-        'av_betweenness_centrality': average_betweenness_centrality(G, connected_only), 
-        'av_degree_centrality': average_degree_centrality(G) 
-        }
+    if (G.size() > 0) and (len(G) > 0): #G.size is number of edges
+        components = {
+            'len_LSCC': len_LSCC(G),
+            'len_LWCC': len_LWCC(G),
+            'flow_hierarchy': flow_hierarchy(G), #Flow hierarchy is defined as the fraction of edges not participating in cycles in a directed graph
+            'av_betweenness_centrality': average_betweenness_centrality(G, connected_only), 
+            'av_degree_centrality': average_degree_centrality(G) 
+            }
+    else:
+        components = {
+            'len_LSCC': 0,
+            'len_LWCC': 0,
+            'flow_hierarchy': 1.,
+            'av_betweenness_centrality': 0., 
+            'av_degree_centrality': 0. 
+            }
 
     df = df.join(pd.DataFrame(components, index = [1]))
 

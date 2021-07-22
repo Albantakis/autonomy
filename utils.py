@@ -39,6 +39,40 @@ def get_graph(agent):
     G = nx.relabel_nodes(G, mapping)
     return G
 
+
+# Activity - PathFollow
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+def get_unique_states_PF(agent, node_indices = None, return_counts = False):
+
+    if type(node_indices) is not (np.ndarray or type(None)):
+        node_indices = np.array(node_indices) 
+    if type(node_indices) == type(None):
+        node_indices = range(agent.n_nodes)
+
+    # input of t-1 with out and hidden after update (t)
+    activity = []
+    for row in range(len(agent.activity)):
+        state = [0 for i in range(agent.n_nodes)]
+        
+        s_input = agent.activity.loc[row]['input'].split(',')
+        for c, i  in enumerate(agent.sensor_ixs):
+            state[i] = int(s_input[c])
+        
+        s_output = agent.activity.loc[row]['output'].split(',')
+        for c, i  in enumerate(agent.motor_ixs):
+            state[i] = int(s_output[c])
+        
+        s_hidden = agent.activity.loc[row]['hiddenAfter'].split(',')
+        for c, i  in enumerate(agent.hidden_ixs):
+            state[i] = int(s_hidden[c])
+
+        activity.append(state)
+      
+
+    return np.unique(np.array(activity)[:,node_indices], return_counts = return_counts, axis = 0)
+
+
+
 # Convert
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Not tested 6/18/2021 ----------
@@ -102,37 +136,7 @@ def get_state_tuple(agent, trial, t):
         return tuple(agent.brain_activity[trial, t].astype(int))
 
 
-# Activity - PathFollow
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-def get_unique_states_PF(agent, node_indices = None, return_counts = False):
-
-    if type(node_indices) is not (np.ndarray or type(None)):
-        node_indices = np.array(node_indices) 
-    if type(node_indices) == type(None):
-        node_indices = range(agent.n_nodes)
-
-    # input of t-1 with out and hidden after update (t)
-    activity = []
-    for row in range(len(agent.activity)):
-        state = [0 for i in range(agent.n_nodes)]
-        
-        s_input = agent.activity.loc[row]['input'].split(',')
-        for c, i  in enumerate(agent.sensor_ixs):
-            state[i] = int(s_input[c])
-        
-        s_output = agent.activity.loc[row]['output'].split(',')
-        for c, i  in enumerate(agent.motor_ixs):
-            state[i] = int(s_output[c])
-        
-        s_hidden = agent.activity.loc[row]['hiddenAfter'].split(',')
-        for c, i  in enumerate(agent.hidden_ixs):
-            state[i] = int(s_hidden[c])
-
-        activity.append(state)
-      
-
-    return np.unique(np.array(activity)[:,node_indices], return_counts = return_counts, axis = 0)
-
+# OLD CHECK
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # TODO: For Sensors I actually only have to exclude the last, for motors only the first.
