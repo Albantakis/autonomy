@@ -23,7 +23,7 @@ def set_entropy(agent, node_indices = None):
 def joint_entropy(agent, node_ind_pair = None, n_t = 1):
 	# evaluates sets of nodes across n_t timesteps
 	prob_dist = get_trans_prob_distribution(agent, node_ind_pair = node_ind_pair, n_t = n_t)
-	return entropy(prob_dist,, base = 2)
+	return entropy(prob_dist, base = 2)
 
 
 def I_MULTI(agent):
