@@ -18,12 +18,12 @@ from itertools import combinations
 def set_entropy(agent, node_indices = None):
 	# evaluates nodes within one ts
 	prob_dist = get_st_prob_distribution(agent, node_indices = node_indices)
-	return entropy(prob_dist)
+	return entropy(prob_dist, base = 2)
 
 def joint_entropy(agent, node_ind_pair = None, n_t = 1):
 	# evaluates sets of nodes across n_t timesteps
 	prob_dist = get_trans_prob_distribution(agent, node_ind_pair = node_ind_pair, n_t = n_t)
-	return entropy(prob_dist)
+	return entropy(prob_dist,, base = 2)
 
 
 def I_MULTI(agent):
@@ -117,8 +117,8 @@ def A_m_sensors(agent, n_t = 5):
 	prob_cond_2 = count/sum(count)
 	
 	#print(entropy(prob_joint_2) - entropy(prob_cond_2)) #This should be zero in deterministic system, but is not because different distributions are used to compute the entropies.
-
-	return entropy(prob_joint_1) - entropy(prob_cond_1) - entropy(prob_joint_2) + entropy(prob_cond_2)
+	A_m = entropy(prob_joint_1, base = 2) - entropy(prob_cond_1, base = 2) - entropy(prob_joint_2, base = 2) + entropy(prob_cond_2, base = 2)
+	return A_m
 
 # TSE Complexity
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
