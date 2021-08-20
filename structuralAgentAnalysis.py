@@ -9,12 +9,6 @@ from networkx.algorithms import degree_centrality, betweenness_centrality, flow_
 
 #####################################################################################################################
 ### Collection of functions to assess the structural properties of an agent based on its connectivity matrix (cm) ###
-
-# Todo: 
-# - Number of connections includes all nodes, not just connected nodes. Make option.
-# - spectral density (Banerjee and Jost, 2009)? --> Too complicated.
-# - density of connections and weight distributions (the latter for ANNs)
-
 #####################################################################################################################
 
 def number_of_connected_sensors(cm,sensor_ixs):
@@ -138,6 +132,10 @@ def average_degree_centrality(G, connected_only = True):
     DC_list = [DC[d] for d in DC]
     avDC = sum(DC_list)/len(DC_list)
     return avDC
+
+
+# All
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 def fullStructuralAnalysis(agent, connected_only = True):
     df = number_of_connected_nodes_by_type(agent)

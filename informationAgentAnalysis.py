@@ -1,4 +1,3 @@
-import numpy as np
 from scipy.stats import entropy
 from pyphi import convert
 from utils import *
@@ -7,8 +6,7 @@ from itertools import combinations
 #####################################################################################################################
 ### Collection of functions to assess the information theoretical properties of an agent based on its activity 	  ###
 
-# Todo: 
-# - Use TSE Complexity from dit?
+# Todo: implement checks that n_t is within the correct range
 
 #####################################################################################################################
 
@@ -128,9 +126,7 @@ def sub_entropies(agent, k):
     """
 
     subsets = [s for s in combinations(agent.hidden_ixs, k)]
-    print(subsets)
     subsetH = sum([set_entropy(agent, node_indices = s) for s in subsets])
-
     subsetH = subsetH / len(subsets)
     
     return subsetH
@@ -141,6 +137,8 @@ def TSE_Complexity(agent):
 	TSE = sum([sub_entropies(agent, k) - k/N * H_N for k in range(1, N)])
 	return TSE
 
+# All
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 def fullInformationAnalysis(agent, save_agent = False):
     
