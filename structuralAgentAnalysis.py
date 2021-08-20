@@ -137,7 +137,7 @@ def average_degree_centrality(G, connected_only = True):
 # All
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-def fullStructuralAnalysis(agent, connected_only = True):
+def fullStructuralAnalysis(agent, connected_only = True, save_agent = False):
     df = number_of_connected_nodes_by_type(agent)
     df = df.join(number_of_connections_by_type(agent, connected_only = connected_only))
 
@@ -171,6 +171,10 @@ def fullStructuralAnalysis(agent, connected_only = True):
 
     df = df.join(pd.DataFrame(components, index = [1]))
 
+
+    if save_agent:
+        agent.structural_analysis = df
+        
     return df
 
 def emptyStructuralAnalysis(index_num = 1):

@@ -133,5 +133,5 @@ def fullDynamicalAnalysis(agent, save_agent = False):
 
 
 def emptyDynamicalAnalysis(index_num = 1):
-    df = pd.DataFrame(dtype=float, columns = ['#Transitions','maxTrans', 'LZ'], index = range(index_num))
+    df = pd.DataFrame(dtype=float, columns = ['#Transitions','maxTL', 'avTL', 'nLZ_time', 'nLZ_space'], index = range(index_num))
     return df
