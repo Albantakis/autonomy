@@ -194,7 +194,7 @@ def sum_of_small_phi_full_system(agent, save_agent = False):
 
 def average_IIT_3_0(agent, save_agent = False):
 
-    tpm, cm, ind = fix_TPM_dim(agent)
+    tpm, cm, ind = fix_TPM_dim(agent, motors = False)
 
     states,counts = get_unique_states(agent, node_indices = ind, return_counts = True, causal = True)
     probs = counts/sum(counts)

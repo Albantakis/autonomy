@@ -40,7 +40,18 @@ def get_graph(agent):
     G = nx.relabel_nodes(G, mapping)
     return G
 
+def append_to_df(agent, df_type, df_function, df_function_inputs, df_colname):
+    
+    df_type_fullname = {
+        'S': 'structural_analysis',
+        'I': 'info_analysis',
+        'C': 'causal_analysis',
+        'D': 'dynamical_analysis'
+    }[df_type]
 
+    df = getattr(agent, df_type_fullname)
+
+    df[df_colname] = df_function(*df_function_inputs)
 
 
 # Activity - Find unique states, transitions, transients

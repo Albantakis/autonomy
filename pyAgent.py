@@ -5,6 +5,7 @@ from pathlib import Path
 
 from plotting import *
 from utils import *
+from structuralAgentAnalysis import LSCC
 
 ### This is the general agent object based on a TPM and (inferred) CM and nothing else necessary. 
 
