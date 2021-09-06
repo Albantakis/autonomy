@@ -16,23 +16,23 @@ represents the causal model of the agent as a transition probability matrix.
 """
 
 import os
+
 import pyphi
 
 pyphi.config.CLEAR_SUBSYSTEM_CACHES_AFTER_COMPUTING_SIA = True
 pyphi.config.PROGRESS_BARS = False
 
-from .__about__ import *  # pylint: disable=wildcard-import
-
 from . import (
-    pyAgent,
+    ShapleyValues,
     causalAgentAnalysis,
     dynamicalAgentAnalysis,
     informationAgentAnalysis,
-    structuralAgentAnalysis,
     plotting,
-    ShapleyValues,
+    pyAgent,
+    structuralAgentAnalysis,
     utils,
 )
+from .__about__ import *  # pylint: disable=wildcard-import
 from .plotting import plot_animat_brain
 
 __all__ = [
@@ -41,8 +41,8 @@ __all__ = [
 ]
 
 print(
-        """
+    """
 Welcome to autonomy!
 To report issues, please send an email to albantakis@wisc.edu.
 """
-    )
+)
