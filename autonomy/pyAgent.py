@@ -158,6 +158,19 @@ class Agent:
         with open(path, mode="rt") as f:
             return cls.from_dict(json.load(f))
 
+    @classmethod
+    def load_example_agent(cls, agent_name = 'A2_C0___28_149'):
+        if isinstance(agent_name, str):
+            path = str(Path(__file__).parent) + "/Examples/" + agent_name + ".json"
+            print(path)
+            try:
+                agent = cls.read(path)        
+                    
+            except FileNotFoundError:
+                print("No example agent to load.")
+
+        return agent
+
     # -------------------- PLOTTING --------------------------------------
 
     def plot_brain(self, state=None, ax=None):
