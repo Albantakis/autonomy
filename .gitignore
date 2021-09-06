@@ -37,3 +37,7 @@ notebooks/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Python files #
+################
+__pycache__
