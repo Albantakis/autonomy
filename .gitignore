@@ -1,4 +1,8 @@
-notebooks/
+# Python files #
+################
+__pycache__
+notebooks
+.ipynb_checkpoints
 
 # Compiled source #
 ###################
@@ -37,7 +41,3 @@ notebooks/
 .Trashes
 ehthumbs.db
 Thumbs.db
-
-# Python files #
-################
-__pycache__
