@@ -15,6 +15,11 @@ automata: acomparison of candidate measures. Forthcoming.
 
 ## Installation
 
+Set up a Python 3 virtual environment and install with
+
+```bash
+pip install "git+https://github.com/Albantakis/autonomy.git"
+```
 Most functions in the autonomy toolbox require PyPhi, the Python library for computing integrated information.
 
 **Note:** this software is only supported on Linux and macOS. However, if you
@@ -24,7 +29,7 @@ Python](https://www.anaconda.com/what-is-anaconda/) distribution and
 
 I suggest following PyPhi's detailed installation guide:
 
-### Detailed installation guide for Mac OS X
+### Detailed PyPhi installation guide for Mac OS X
 
 [See here](https://github.com/wmayner/pyphi/blob/develop/INSTALLATION.rst).
 
@@ -35,10 +40,11 @@ I suggest following PyPhi's detailed installation guide:
 The |Agent| object is the main object on which computations are performed. It
 represents the causal model of the agent as a transition probability matrix.
 
-It requires a transition probability matrix (TPM). 
+Initializing an agent requires a transition probability matrix (TPM). 
 Providing a connectivity matrix is optional. 
 Most functions also require an activity attribute.
-See example agents in Data folder.
+See example agents in Data folder. 
+Finally, information about the sensors, motors, and hidden units is required for most functions. See yaml files in the Phenotypes folder.
 
 Once an agent object is defined, a full structural analysis can be initialized with 
 the ``fullStructuralAnalysis(agent)'' function, and likewise for a full dynamical, information-theoretical, 
@@ -46,7 +52,7 @@ or causal analysis. These functions output a pandas dataframe with all computed 
 **Note:** the full causal analysis can be very time consuming.
 
 ## Contact
-To report issues, please send an email to albantakis@wisc.edu.
+For any questions related to this code, and to report issues, please send an email to albantakis@wisc.edu.
 
 <!-- ## Credit
 
