@@ -17,7 +17,7 @@ def fix_TPM_dim(agent, motors=False):
     # PathFollow agents TPMs are only specified for motors = 000 to save memory, motors do not feed back
     if motors is False:
         ind = np.sort(agent.sensor_ixs + agent.hidden_ixs)
-        cm = agent.cm[:, ind][ind]
+        cm = np.array(agent.cm)[:, ind][ind]
         if len(agent.tpm) is not (2 ** agent.n_nodes):
             tpm = np.array(agent.tpm)[:, ind]
         else:
