@@ -1,10 +1,12 @@
 
-import numpy as np
-import pyphi
-import networkx as nx
 import copy
+
+import networkx as nx
+import numpy as np
 import pandas as pd
-from networkx.algorithms import degree_centrality, betweenness_centrality, flow_hierarchy
+import pyphi
+from networkx.algorithms import (betweenness_centrality, degree_centrality,
+                                 flow_hierarchy)
 
 from .utils import get_graph
 

@@ -1,7 +1,9 @@
-import numpy as np
-import networkx as nx
 from copy import copy
+
+import networkx as nx
+import numpy as np
 import pandas as pd
+
 
 # General 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

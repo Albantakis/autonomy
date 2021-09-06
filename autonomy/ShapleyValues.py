@@ -1,5 +1,6 @@
-import pyphi
 from math import factorial
+
+import pyphi
 
 #Todo: The shapley values of the individual nodes should sum to the alpha of the purview as a whole.
 # That is true, but only up to 10^-4 because of rounding in pyphi I assume.

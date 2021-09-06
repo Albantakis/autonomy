@@ -2,8 +2,8 @@ import numpy as np
 import numpy.random as ran
 import pyphi
 
-from .utils import *
 from .causalAgentAnalysis import fix_TPM_dim
+from .utils import *
 
 #######################################################################################################################
 ### Collection of functions to assess the dynamical properties of an agent 											###

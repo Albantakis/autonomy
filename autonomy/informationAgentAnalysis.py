@@ -1,6 +1,7 @@
-from scipy.stats import entropy
-from pyphi import convert
 from itertools import combinations
+
+from pyphi import convert
+from scipy.stats import entropy
 
 from .utils import *
 

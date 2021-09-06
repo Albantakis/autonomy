@@ -1,10 +1,11 @@
+import itertools
+
 import numpy as np
 import pyphi
-import itertools 
 from scipy.stats import entropy
 
-from .utils import *
 from .ShapleyValues import compute_shapley_values
+from .utils import *
 
 #######################################################################################################################
 ### Collection of functions to assess the causal properties of an agent based on its transition probability matrix  ###

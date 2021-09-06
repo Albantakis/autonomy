@@ -1,8 +1,9 @@
-import numpy as np
 import networkx as nx
+import numpy as np
 
 from .structuralAgentAnalysis import densely_connected_nodes
 from .utils import *
+
 
 def plot_animat_brain(agent, state=None, ax=None):
     n_nodes = agent.n_nodes
