@@ -1,4 +1,8 @@
-notebooks/
+# Python files #
+################
+__pycache__
+notebooks
+.ipynb_checkpoints
 
 # Compiled source #
 ###################

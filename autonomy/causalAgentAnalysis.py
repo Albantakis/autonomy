@@ -220,7 +220,7 @@ def average_IIT_3_0(agent, save_agent = False):
 
         if save_agent:
         	agent.Phi_3_0["states"][s] = {
-        		"major_complex": sia.subsystem.nodes,
+        		"major_complex": sia.subsystem.node_indices,
         		"state": state,
         		"Phi": sia.phi,
         		"num_distinctions": len(sia.ces),
