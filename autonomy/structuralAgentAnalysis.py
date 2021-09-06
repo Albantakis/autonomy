@@ -4,8 +4,9 @@ import pyphi
 import networkx as nx
 import copy
 import pandas as pd
-from utils import get_graph
 from networkx.algorithms import degree_centrality, betweenness_centrality, flow_hierarchy
+
+from .utils import get_graph
 
 #####################################################################################################################
 ### Collection of functions to assess the structural properties of an agent based on its connectivity matrix (cm) ###

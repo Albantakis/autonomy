@@ -1,7 +1,8 @@
 from scipy.stats import entropy
 from pyphi import convert
-from utils import *
 from itertools import combinations
+
+from .utils import *
 
 #####################################################################################################################
 ### Collection of functions to assess the information theoretical properties of an agent based on its activity 	  ###
