@@ -67,17 +67,32 @@ def activity_list_causal_inputs(agent, df_activity=None):
     for row in range(len(df_activity)):
         state = [0 for i in range(agent.n_nodes)]
 
-        s_input = df_activity.iloc[row]["input"].split(",")
-        for c, i in enumerate(agent.sensor_ixs):
-            state[i] = int(s_input[c])
+        if isinstance(df_activity.iloc[row]["input"], str):
 
-        s_output = df_activity.iloc[row]["output"].split(",")
-        for c, i in enumerate(agent.motor_ixs):
-            state[i] = int(s_output[c])
+            s_input = df_activity.iloc[row]["input"].split(",")
+            for c, i in enumerate(agent.sensor_ixs):
+                state[i] = int(s_input[c])
 
-        s_hidden = df_activity.iloc[row]["hiddenAfter"].split(",")
-        for c, i in enumerate(agent.hidden_ixs):
-            state[i] = int(s_hidden[c])
+            s_output = df_activity.iloc[row]["output"].split(",")
+            for c, i in enumerate(agent.motor_ixs):
+                state[i] = int(s_output[c])
+
+            s_hidden = df_activity.iloc[row]["hiddenAfter"].split(",")
+            for c, i in enumerate(agent.hidden_ixs):
+                state[i] = int(s_hidden[c])
+
+        else:
+            s_input = df_activity.iloc[row]["input"]
+            for c, i in enumerate(agent.sensor_ixs):
+                state[i] = s_input[c]
+
+            s_output = df_activity.iloc[row]["output"]
+            for c, i in enumerate(agent.motor_ixs):
+                state[i] = s_output[c]
+
+            s_hidden = df_activity.iloc[row]["hiddenAfter"]
+            for c, i in enumerate(agent.hidden_ixs):
+                state[i] = s_hidden[c]
 
         activity.append(state)
 
@@ -96,19 +111,35 @@ def activity_list_concurrent_inputs(agent, df_activity=None):
     for row in range(len(df_activity)):
         state = [0 for i in range(agent.n_nodes)]
 
-        s_input = df_activity.iloc[row]["input"].split(",")
-        for c, i in enumerate(agent.sensor_ixs):
-            state[i] = int(s_input[c])
+        if isinstance(df_activity.iloc[row]["input"], str):
 
-        # First state motors are 0, then current state motor is update from t-1
-        if row > 0:
-            s_output = df_activity.iloc[row - 1]["output"].split(",")
-            for c, i in enumerate(agent.motor_ixs):
-                state[i] = int(s_output[c])
+            s_input = df_activity.iloc[row]["input"].split(",")
+            for c, i in enumerate(agent.sensor_ixs):
+                state[i] = int(s_input[c])
 
-        s_hidden = df_activity.iloc[row]["hiddenBefore"].split(",")
-        for c, i in enumerate(agent.hidden_ixs):
-            state[i] = int(s_hidden[c])
+            # First state motors are 0, then current state motor is update from t-1
+            if row > 0:
+                s_output = df_activity.iloc[row - 1]["output"].split(",")
+                for c, i in enumerate(agent.motor_ixs):
+                    state[i] = int(s_output[c])
+
+            s_hidden = df_activity.iloc[row]["hiddenBefore"].split(",")
+            for c, i in enumerate(agent.hidden_ixs):
+                state[i] = int(s_hidden[c])
+        else:
+            s_input = df_activity.iloc[row]["input"]
+            for c, i in enumerate(agent.sensor_ixs):
+                state[i] = s_input[c]
+
+            # First state motors are 0, then current state motor is update from t-1
+            if row > 0:
+                s_output = df_activity.iloc[row - 1]["output"]
+                for c, i in enumerate(agent.motor_ixs):
+                    state[i] = s_output[c]
+
+            s_hidden = df_activity.iloc[row]["hiddenBefore"]
+            for c, i in enumerate(agent.hidden_ixs):
+                state[i] = s_hidden[c]
 
         activity.append(state)
 
