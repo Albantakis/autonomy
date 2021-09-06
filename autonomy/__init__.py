@@ -22,9 +22,16 @@ import pyphi
 pyphi.config.CLEAR_SUBSYSTEM_CACHES_AFTER_COMPUTING_SIA = True
 pyphi.config.PROGRESS_BARS = False
 
-from . import (ShapleyValues, causalAgentAnalysis, dynamicalAgentAnalysis,
-               informationAgentAnalysis, plotting, pyAgent,
-               structuralAgentAnalysis, utils)
+from . import (
+    ShapleyValues,
+    causalAgentAnalysis,
+    dynamicalAgentAnalysis,
+    informationAgentAnalysis,
+    plotting,
+    pyAgent,
+    structuralAgentAnalysis,
+    utils,
+)
 from .__about__ import *  # pylint: disable=wildcard-import
 from .plotting import plot_animat_brain
 
@@ -34,8 +41,8 @@ __all__ = [
 ]
 
 print(
-        """
+    """
 Welcome to autonomy!
 To report issues, please send an email to albantakis@wisc.edu.
 """
-    )
+)

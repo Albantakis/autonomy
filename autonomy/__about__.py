@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # __about__.py
@@ -7,7 +6,9 @@
 
 __title__ = "autonomy"
 __version__ = "1.0.0"
-__description__ = "Python toolbox for computing measures of autonomy on small artificial agents."
+__description__ = (
+    "Python toolbox for computing measures of autonomy on small artificial agents."
+)
 __author__ = "Larissa Albantakis"
 __author_email__ = "albantakis@wisc.edu"
 __copyright__ = "Copyright 2020-2025 Larissa Albantakis"
