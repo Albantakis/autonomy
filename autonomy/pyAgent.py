@@ -143,6 +143,7 @@ class Agent:
         Returns:
             path (Path): The path that was written to.
         """
+        path = Path(path).with_suffix('.json')
         with open(path, mode='wt') as f:
             json.dump(self.to_dict(), f)
         return path
