@@ -1,17 +1,19 @@
-import pyphi
-import yaml
+import json
+from collections import UserDict
+from copy import deepcopy
 from pathlib import Path
 
+import pyphi
+import yaml
+
 from .plotting import *
-from .utils import *
 from .structuralAgentAnalysis import LSCC
+from .utils import *
 
 ### This is the general agent object based on a TPM and (inferred) CM and nothing else necessary. 
 
-class LOD:
+class LOD(UserDict):
     "Line of descent paramenters, e.g.: fitness, generation, run"
-    def __init__(self, LOD_dict):
-        self.__dict__ = LOD_dict
 
 class Agent:
     """
@@ -94,6 +96,72 @@ class Agent:
     def LSCC(self):
         G = get_graph(self)
         return LSCC(G)
+
+        
+    def to_dict(self):
+        """Return a dictionary-only representation of the Agent."""
+        # Make a copy to prevent in-place modification
+        dct = deepcopy(self.__dict__)
+
+        def convert(value):
+            if isinstance(value, pd.DataFrame):
+                return value.to_dict()
+            if isinstance(value, np.ndarray):
+                return value.tolist()
+            if isinstance(value, LOD):
+                return dict(value)
+            return value
+
+        return {
+            key: convert(value) for key, value in dct.items()
+        }
+        
+
+    @classmethod
+    def from_dict(cls, dct):
+        """Create an Agent from a dictionary representation."""
+        # Make a copy to prevent in-place modification
+        dct = deepcopy(dct)
+
+        dct['LOD_dict'] = dct.pop('LOD')
+        kwargs = {
+            kwarg: dct.pop(kwarg)
+            for kwarg in ['tpm', 'cm', 'activity', 'LOD_dict']
+        }
+
+        agent = cls(**kwargs)
+        agent.__dict__.update(dct)
+        return agent
+
+        
+    def write(self, path):
+        """Write this Agent to disk as a JSON file.
+
+        Args:
+            path (path_like): The filepath to write to. Suffix will be changed to '.json'.
+        
+        Returns:
+            path (Path): The path that was written to.
+        """
+        with open(path, mode='wt') as f:
+            json.dump(self.to_dict(), f)
+        return path
+    
+
+    @classmethod
+    def read(cls, path):
+        """Return an Agent stored in a JSON file on disk.
+
+        Args:
+            path (path_like): The filepath to read from.
+
+        Returns:
+            Agent: The stored agent.
+        """
+        with open(path, mode='rt') as f:
+            return cls.from_dict(json.load(f))
+
+
     
 # -------------------- PLOTTING --------------------------------------
 
