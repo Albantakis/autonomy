@@ -19,17 +19,19 @@ from .utils import get_graph
 
 def number_of_connected_sensors(cm, sensor_ixs):
     # Sensors with outputs
+    # cm should be np.array
     return np.sum(np.sum(cm[sensor_ixs, :], 1) > 0)
 
 
 def number_of_connected_motors(cm, motor_ixs):
     # Motors with inputs
+    # cm should be np.array
     return np.sum(np.sum(cm[:, motor_ixs], 0) > 0)
 
 
 def number_of_densely_connected_nodes(cm_agent, allow_self_loops=False):
     # num hidden nodes with inputs and outputs
-    cm = copy.copy(cm_agent)
+    cm = np.array(copy.copy(cm_agent))
     if not allow_self_loops:
         for i in range(len(cm)):
             cm[i, i] = 0
@@ -38,7 +40,7 @@ def number_of_densely_connected_nodes(cm_agent, allow_self_loops=False):
 
 def connected_nodes(agent):
     # Sensors with outputs, motors with inputs, and hidden with both
-    cm = copy.copy(agent.cm)
+    cm = np.array(copy.copy(agent.cm))
     # kill self loops
     for i in range(len(cm)):
         cm[i, i] = 0
@@ -56,7 +58,7 @@ def connected_nodes(agent):
 
 
 def number_of_connected_nodes_by_type(agent):
-    cm = agent.cm
+    cm = np.array(agent.cm)
     cS = number_of_connected_sensors(cm, agent.sensor_ixs)
     cH = number_of_densely_connected_nodes(cm)
     cM = number_of_connected_motors(cm, agent.motor_ixs)
@@ -78,7 +80,7 @@ def number_of_connections(cm, a_ixs, b_ixs):
 
 
 def number_of_connections_by_type(agent, connected_only=True):
-    cm = agent.cm
+    cm = np.array(agent.cm)
     if connected_only:
         ind = set(connected_nodes(agent))
     else:
@@ -155,11 +157,12 @@ def fullStructuralAnalysis(agent, connected_only=True, save_agent=False):
     df = number_of_connected_nodes_by_type(agent)
     df = df.join(number_of_connections_by_type(agent, connected_only=connected_only))
 
+    cm = np.array(agent.cm)
     # Components
     if connected_only == True:
         ind_con = connected_nodes(agent)
         if len(ind_con) > 0:
-            cm_connected = agent.cm[np.ix_(ind_con, ind_con)]
+            cm_connected = cm[np.ix_(ind_con, ind_con)]
             G = nx.from_numpy_matrix(cm_connected, create_using=nx.DiGraph())
         else:
             G = nx.empty_graph(n=0, create_using=nx.DiGraph())
