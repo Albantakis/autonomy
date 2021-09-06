@@ -1,6 +1,4 @@
-<p>
-  ## Autonomy
-</p>
+# Autonomy
 
 Autonomy is a Python toolbox for computing measures of autonomy on small 
 artificial agents defined by their transition probability matrices.
