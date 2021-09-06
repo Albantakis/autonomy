@@ -123,12 +123,25 @@ class Agent:
         dct = deepcopy(dct)
 
         dct["LOD_dict"] = dct.pop("LOD")
+        # Convert dataframes
+        for key, value in dct.items():
+            if key == 'activity' or key.endswith('_analysis'):
+                dct[key] = pd.DataFrame.from_dict(value)
+
+        # Extract constructor arguments
+        if 'LOD' in dct:
+            dct['LOD_dict'] = dct.pop('LOD')
         kwargs = {
-            kwarg: dct.pop(kwarg) for kwarg in ["tpm", "cm", "activity", "LOD_dict"]
+            kwarg: dct.pop(kwarg)
+            for kwarg in filter(lambda key: key in dct, ['tpm', 'cm', 'activity', 'LOD_dict'])
         }
 
+        # Construct the agent
         agent = cls(**kwargs)
+
+        # Attach remaining attributes
         agent.__dict__.update(dct)
+
         return agent
 
     def write(self, path):
