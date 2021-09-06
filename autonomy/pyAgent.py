@@ -1,5 +1,4 @@
 import pyphi
-import numpy as np
 import yaml
 from pathlib import Path
 
