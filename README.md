@@ -1,6 +1,6 @@
 # Autonomy
 
-Autonomy is a Python toolbox for computing measures of autonomy on small 
+`autonomy` is a Python package for computing measures of autonomy on small
 artificial agents defined by their transition probability matrices.
 
 **If you use this code, please cite the paper:**
@@ -8,8 +8,8 @@ artificial agents defined by their transition probability matrices.
 ---
 
 Albantakis L (2021)
-Quantifying the autonomy of structurally diverse 
-automata: acomparison of candidate measures. Forthcoming.
+Quantifying the autonomy of structurally diverse
+automata: a comparison of candidate measures. Forthcoming.
 
 ---
 
@@ -20,40 +20,44 @@ Set up a Python 3 virtual environment and install with
 ```bash
 pip install "git+https://github.com/Albantakis/autonomy.git"
 ```
-Most functions in the autonomy toolbox require PyPhi, the Python library for computing integrated information.
+
+Most functions in `autonomy` require [PyPhi](https://github.com/wmayner/pyphi),
+the Python library for computing integrated information.
 
 **Note:** this software is only supported on Linux and macOS. However, if you
 use Windows, you can run it by using the [Anaconda
-Python](https://www.anaconda.com/what-is-anaconda/) distribution and
-[installing PyPhi with conda](https://anaconda.org/wmayner/pyphi):
+Python](https://www.anaconda.com/what-is-anaconda/) distribution and [installing
+PyPhi with conda](https://anaconda.org/wmayner/pyphi):
 
-I suggest following PyPhi's detailed installation guide:
+```bash
+conda install -c wmayner pyphi
+```
 
-### Detailed PyPhi installation guide for Mac OS X
+I suggest following PyPhi's [detailed installation guide](https://github.com/wmayner/pyphi/blob/develop/INSTALLATION.rst).
 
-[See here](https://github.com/wmayner/pyphi/blob/develop/INSTALLATION.rst).
-
-## Documentation 
+## Documentation
 
 ### Getting started
 
-The |Agent| object is the main object on which computations are performed. It
+The `Agent` object is the main object on which computations are performed. It
 represents the causal model of the agent as a transition probability matrix.
 
-Initializing an agent requires a transition probability matrix (TPM). 
-Providing a connectivity matrix is optional. 
-Most functions also require an activity attribute.
-See example agents in Data folder. 
-Finally, information about the sensors, motors, and hidden units is required for most functions. See yaml files in the Phenotypes folder.
+Initializing an agent requires a transition probability matrix (TPM).  Providing
+a connectivity matrix is optional.  Most functions also require an activity
+attribute.  See example agents in `Data` folder.  Finally, information about the
+sensors, motors, and hidden units is required for most functions. See YAML files
+in the `autonomy/Phenotypes` folder.
 
-Once an agent object is defined, a full structural analysis can be initialized with 
-the ``fullStructuralAnalysis(agent)'' function, and likewise for a full dynamical, information-theoretical, 
-or causal analysis. These functions output a pandas dataframe with all computed values.
-**Note:** the full causal analysis can be very time consuming.
+Once an agent object is defined, a full structural analysis can be initialized
+with the `fullStructuralAnalysis(agent)` function, and likewise for a full
+dynamical, information-theoretical, or causal analysis. These functions output a
+pandas dataframe with all computed values. **Note:** the full causal analysis
+can be very time consuming.
 
-An example script and agent can be found in the Examples folder.
+An example notebook and agent can be found in the `autonomy/Examples` folder.
 
 ## Contact
+
 For any questions related to this code, and to report issues, please send an email to albantakis@wisc.edu.
 
 <!-- ## Credit
