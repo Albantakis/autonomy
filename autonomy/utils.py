@@ -320,7 +320,7 @@ def get_trans_prob_distribution(agent, node_ind_pair=None, n_t=1, order=False):
 
 # Convert
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-## Todo: Assumes binary, check with pyphi
+## TODO: Assumes binary, check with pyphi
 def state2num(state, convention="loli"):
     """
     Function description
@@ -342,7 +342,7 @@ def state2num(state, convention="loli"):
     return int(num)
 
 
-## Todo: Assumes binary
+## TODO: Assumes binary
 def num2state(num, n_nodes, convention="loli"):
     """
     Function description

@@ -60,7 +60,7 @@ def sys_entropy(agent):
 # Autonomy Causal
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def effective_information(agent):
-    # Todo: A_m(n_t = 1) is the same as the effective info and computes much faster
+    # TODO: A_m(n_t = 1) is the same as the effective info and computes much faster
     tpm, _, _ = fix_TPM_dim(agent, motors=True)
     sbs_tpm = pyphi.convert.state_by_node2state_by_state(tpm)
     avg_repertoire = np.mean(sbs_tpm, 0)
@@ -72,7 +72,7 @@ def A_m_sensors_causal(agent, n_t=5):
     # H(OM_t|S^_t-1,...S^_t-n) - H(OM_t|OM^_t-1, S^_t-1,...S^_t-n)
     # Note that for deterministic systems the second part is 0
     # --> A^_m = H(OM_t|S^_t-1, ..., S^_t-m)
-    # Todo: add the part for non-deterministic agents (vvv)
+    # TODO: add the part for non-deterministic agents (vvv)
 
     tpm, _, _ = fix_TPM_dim(agent, motors=True)
     network = pyphi.Network(tpm)
@@ -126,7 +126,7 @@ def A_m_sensors_causal(agent, n_t=5):
 def alpha_ratio_hidden(agent):
     tpm, cm, _ = fix_TPM_dim(agent, motors=True)
 
-    # Todo: once it is possible to define node specific transitions in pyphi, improve
+    # TODO: once it is possible to define node specific transitions in pyphi, improve
     ind_hs = tuple(agent.hidden_ixs + agent.sensor_ixs)
     ind_m = tuple(agent.motor_ixs)
     # node_ind_pair = [ind_hs, ind_m]
@@ -171,7 +171,7 @@ def alpha_ratio_hidden(agent):
                     sum_alpha_hidden_purview = sum_alpha_hidden_purview + d.alpha
 
                 elif len(hidden_purview_idx) > 0:
-                    # Todo: improve, only compute for the hidden nodes
+                    # TODO: improve, only compute for the hidden nodes
                     shapley_values = np.array(
                         compute_shapley_values(d, transition, pur)
                     )
