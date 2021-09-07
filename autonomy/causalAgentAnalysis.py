@@ -67,6 +67,7 @@ def A_m_sensors_causal(agent, n_t=5):
     # H(OM_t|S^_t-1,...S^_t-n) - H(OM_t|OM^_t-1, S^_t-1,...S^_t-n)
     # Note that for deterministic systems the second part is 0
     # --> A^_m = H(OM_t|S^_t-1, ..., S^_t-m)
+    # Todo: add the part for non-deterministic agents (vvv)
 
     tpm, _, _ = fix_TPM_dim(agent, motors=True)
     network = pyphi.Network(tpm)
