@@ -1,4 +1,4 @@
-# pyAgent.py
+# agent.py
 
 import json
 from collections import UserDict
@@ -11,7 +11,7 @@ import pyphi
 import yaml
 
 from .plotting import *
-from .structuralAgentAnalysis import LSCC
+from .structural_agent_analysis import LSCC
 from .utils import *
 
 # This is the general agent object based on a TPM and (inferred) CM and nothing
@@ -63,7 +63,7 @@ class Agent:
         self, tpm, cm=None, activity=None, params=None, add_attr=None, LOD_dict=None
     ):
         """
-        Called by pyAgents.Agent(...)
+        Called by agent.Agent(...)
 
         Keyword Args:
             agent_params: either string that leads to yml file with parameters or dictionary of parameters.
@@ -92,7 +92,7 @@ class Agent:
     def _get_agent_params(self, agent_params):
         print(agent_params)
         if isinstance(agent_params, str):
-            path = (Path(__file__).parent / "Phenotypes" / agent_params).with_suffix(
+            path = (Path(__file__).parent / "phenotypes" / agent_params).with_suffix(
                 ".yaml"
             )
             print(path)
@@ -207,7 +207,7 @@ class Agent:
     @classmethod
     def load_example_agent(cls, agent_name="A2_C0___28_149"):
         if isinstance(agent_name, str):
-            path = str(Path(__file__).parent) + "/Examples/" + agent_name + ".json"
+            path = str(Path(__file__).parent) + "/examples/" + agent_name + ".json"
             print(path)
             try:
                 agent = cls.read(path)

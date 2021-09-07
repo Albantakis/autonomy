@@ -27,18 +27,18 @@ pyphi.config.CLEAR_SUBSYSTEM_CACHES_AFTER_COMPUTING_SIA = True
 pyphi.config.PROGRESS_BARS = False
 
 from . import (
-    ShapleyValues,
-    causalAgentAnalysis,
-    dynamicalAgentAnalysis,
-    informationAgentAnalysis,
+    shapley_values,
+    causal_agent_analysis,
+    dynamical_agent_analysis,
+    information_agent_analysis,
     plotting,
-    pyAgent,
-    structuralAgentAnalysis,
+    agent,
+    structural_agent_analysis,
     utils,
 )
 from .__about__ import *  # pylint: disable=wildcard-import
 from .plotting import plot_animat_brain
-from .pyAgent import LOD, Agent
+from .agent import LOD, Agent
 
 __all__ = [
     "Agent",

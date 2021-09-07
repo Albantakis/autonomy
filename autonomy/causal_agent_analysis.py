@@ -1,4 +1,4 @@
-# causalAgentAnalysis.py
+# causal_agent_analysis.py
 
 import itertools
 
@@ -6,7 +6,7 @@ import numpy as np
 import pyphi
 from scipy.stats import entropy
 
-from .ShapleyValues import compute_shapley_values
+from .shapley_values import compute_shapley_values
 from .utils import *
 
 ###############################################################################

@@ -1,10 +1,10 @@
-# dynamicalAgentAnalysis.py
+# dynamical_agent_analysis.py
 
 import numpy as np
 import numpy.random as ran
 import pyphi
 
-from .causalAgentAnalysis import fix_TPM_dim
+from .causal_agent_analysis import fix_TPM_dim
 from .utils import *
 
 ##############################################################################

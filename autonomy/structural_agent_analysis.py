@@ -1,4 +1,4 @@
-# structuralAgentAnalysis.py
+# structural_agent_analysis.py
 
 import copy
 

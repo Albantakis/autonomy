@@ -1,4 +1,4 @@
-# informationAgentAnalysis.py
+# information_agent_analysis.py
 
 from itertools import combinations
 

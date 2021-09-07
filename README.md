@@ -44,9 +44,9 @@ represents the causal model of the agent as a transition probability matrix.
 
 Initializing an agent requires a transition probability matrix (TPM).  Providing
 a connectivity matrix is optional.  Most functions also require an activity
-attribute.  See example agents in `Data` folder.  Finally, information about the
+attribute.  See example agents in `data` folder.  Finally, information about the
 sensors, motors, and hidden units is required for most functions. See YAML files
-in the `autonomy/Phenotypes` folder.
+in the `autonomy/phenotypes` folder.
 
 Once an agent object is defined, a full structural analysis can be initialized
 with the `fullStructuralAnalysis(agent)` function, and likewise for a full
@@ -54,7 +54,7 @@ dynamical, information-theoretical, or causal analysis. These functions output a
 pandas dataframe with all computed values. **Note:** the full causal analysis
 can be very time consuming.
 
-An example notebook and agent can be found in the `autonomy/Examples` folder.
+An example notebook and agent can be found in the `autonomy/examples` folder.
 
 ## Contact
 

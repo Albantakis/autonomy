@@ -1,4 +1,4 @@
-# ShapleyValues.py
+# shapley_values.py
 
 from math import factorial
 
