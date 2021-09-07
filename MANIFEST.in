@@ -1,0 +1,3 @@
+include README.md
+recursive-include autonomy/Phenotypes *
+recursive-include autonomy/Examples *
