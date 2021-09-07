@@ -1,10 +1,9 @@
-import pyphi
-import numpy as np
 import networkx as nx
-
+import numpy as np
+import pyphi
 from plotting import *
-from utils import *
 from structural_agent_analysis import *
+from utils import *
 
 
 class Agent:

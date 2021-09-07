@@ -1,8 +1,8 @@
-import numpy as np
-import networkx as nx
 import copy
+
+import networkx as nx
+import numpy as np
 from matplotlib import pyplot as plt
-import matplotlib.animation as animation
 
 # from pyBlockEnvironment import *
 from structural_agent_analysis import densely_connected_nodes
