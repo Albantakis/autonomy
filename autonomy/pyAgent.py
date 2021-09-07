@@ -178,11 +178,12 @@ class Agent:
             print(path)
             try:
                 agent = cls.read(path)        
+                return agent
                     
             except FileNotFoundError:
                 print("No example agent to load.")
 
-        return agent
+        
 
     # -------------------- PLOTTING --------------------------------------
 

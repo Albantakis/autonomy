@@ -8,6 +8,7 @@ from .utils import *
 def plot_animat_brain(agent, state=None, ax=None):
     n_nodes = agent.n_nodes
     G = get_graph(agent)
+    cm = np.array(agent.cm)
 
     node_type = np.array([0 for i in range(n_nodes)])
     node_type[agent.motor_ixs] = 2
@@ -35,7 +36,7 @@ def plot_animat_brain(agent, state=None, ax=None):
     node_labels = np.array(G.nodes)
 
     connected_nodes = (
-        list(densely_connected_nodes(agent.cm)) + agent.motor_ixs + agent.sensor_ixs
+        list(densely_connected_nodes(cm)) + agent.motor_ixs + agent.sensor_ixs
     )
     node_colors = [
         node_colors[i] if i in connected_nodes else colors[state[i], 3]
@@ -49,7 +50,7 @@ def plot_animat_brain(agent, state=None, ax=None):
     ]
 
     # indicate self-loops by thick lines
-    self_nodes_ixs = [i for i in range(n_nodes) if agent.cm[i, i] == 1]
+    self_nodes_ixs = [i for i in range(n_nodes) if cm[i, i] == 1]
     linewidths = [2.5 if i in self_nodes_ixs else 1 for i in range(n_nodes)]
 
     # position
