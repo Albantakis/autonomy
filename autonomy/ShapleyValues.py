@@ -1,3 +1,5 @@
+# ShapleyValues.py
+
 from math import factorial
 
 import pyphi

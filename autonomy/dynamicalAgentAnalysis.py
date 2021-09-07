@@ -1,3 +1,5 @@
+# dynamicalAgentAnalysis.py
+
 import numpy as np
 import numpy.random as ran
 import pyphi

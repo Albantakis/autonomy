@@ -1,3 +1,5 @@
+# structuralAgentAnalysis.py
+
 import copy
 
 import networkx as nx

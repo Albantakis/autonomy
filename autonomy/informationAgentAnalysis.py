@@ -1,3 +1,5 @@
+# informationAgentAnalysis.py
+
 from itertools import combinations
 
 from pyphi import convert
