@@ -4,6 +4,8 @@ import json
 from collections import UserDict
 from copy import deepcopy
 from pathlib import Path
+from pprint import pformat
+from textwrap import indent
 
 import pyphi
 import yaml
@@ -44,6 +46,18 @@ class Agent:
     Possible Attribute:
         LOD
     """
+
+    # Attributes to display in the string representation of the agent
+    DISPLAY_ATTRIBUTES = [
+        "n_nodes",
+        "n_sensors",
+        "n_hidden",
+        "n_motors",
+        "sensor_ixs",
+        "hidden_ixs",
+        "motor_ixs",
+        "cm",
+    ]
 
     def __init__(
         self, tpm, cm=None, activity=None, params=None, add_attr=None, LOD_dict=None
@@ -98,6 +112,17 @@ class Agent:
             params = agent_params
 
         self.__dict__.update(params)
+
+    def __repr__(self):
+        display_attrs = {
+            key: self.__dict__[key]
+            for key in self.DISPLAY_ATTRIBUTES
+            if key in self.__dict__
+        }
+        return f"Agent(\n{indent(pformat(display_attrs, sort_dicts=False), '  ')})"
+
+    def __str__(self):
+        return repr(self)
 
     def _infer_cm(self):
         return pyphi.tpm.infer_cm(pyphi.convert.to_multidimensional(self.tpm))
