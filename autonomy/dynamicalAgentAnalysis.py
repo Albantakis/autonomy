@@ -5,9 +5,9 @@ import pyphi
 from .causalAgentAnalysis import fix_TPM_dim
 from .utils import *
 
-#######################################################################################################################
-### Collection of functions to assess the dynamical properties of an agent 											###
-#######################################################################################################################
+##############################################################################
+### Collection of functions to assess the dynamical properties of an agent
+##############################################################################
 
 # specific utils
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -76,7 +76,8 @@ def LZ_algorithm(string):
 # measures
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def number_of_unique_transitions(agent):
-    # Sensor + Hidden -> Hidden + Motor (Motors do not feed back and sensors are set by the environment)
+    # Sensor + Hidden -> Hidden + Motor (Motors do not feed back and sensors are
+    # set by the environment)
     ind_hs = tuple(agent.hidden_ixs + agent.sensor_ixs)
     ind_hm = tuple(agent.hidden_ixs + agent.motor_ixs)
     node_ind_pair = [ind_hs, ind_hm]

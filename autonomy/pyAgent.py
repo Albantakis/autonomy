@@ -10,7 +10,8 @@ from .plotting import *
 from .structuralAgentAnalysis import LSCC
 from .utils import *
 
-### This is the general agent object based on a TPM and (inferred) CM and nothing else necessary.
+# This is the general agent object based on a TPM and (inferred) CM and nothing
+# else necessary.
 
 
 class LOD(UserDict):
@@ -69,7 +70,8 @@ class Agent:
         self.activity = activity
         self.n_nodes = len(tpm[1])
 
-        # TODO: Test that TPM dimsensions and sensor, motor indices, num nodes all fit together
+        # TODO: Test that TPM dimsensions and sensor, motor indices, num nodes
+        # all fit together
 
     def _get_agent_params(self, agent_params):
         print(agent_params)
@@ -125,15 +127,17 @@ class Agent:
         dct["LOD_dict"] = dct.pop("LOD")
         # Convert dataframes
         for key, value in dct.items():
-            if key == 'activity' or key.endswith('_analysis'):
+            if key == "activity" or key.endswith("_analysis"):
                 dct[key] = pd.DataFrame.from_dict(value)
 
         # Extract constructor arguments
-        if 'LOD' in dct:
-            dct['LOD_dict'] = dct.pop('LOD')
+        if "LOD" in dct:
+            dct["LOD_dict"] = dct.pop("LOD")
         kwargs = {
             kwarg: dct.pop(kwarg)
-            for kwarg in filter(lambda key: key in dct, ['tpm', 'cm', 'activity', 'LOD_dict'])
+            for kwarg in filter(
+                lambda key: key in dct, ["tpm", "cm", "activity", "LOD_dict"]
+            )
         }
 
         # Construct the agent
@@ -172,18 +176,16 @@ class Agent:
             return cls.from_dict(json.load(f))
 
     @classmethod
-    def load_example_agent(cls, agent_name = 'A2_C0___28_149'):
+    def load_example_agent(cls, agent_name="A2_C0___28_149"):
         if isinstance(agent_name, str):
             path = str(Path(__file__).parent) + "/Examples/" + agent_name + ".json"
             print(path)
             try:
-                agent = cls.read(path)        
+                agent = cls.read(path)
                 return agent
-                    
+
             except FileNotFoundError:
                 print("No example agent to load.")
-
-        
 
     # -------------------- PLOTTING --------------------------------------
 

@@ -7,14 +7,16 @@ from scipy.stats import entropy
 from .ShapleyValues import compute_shapley_values
 from .utils import *
 
-#######################################################################################################################
-### Collection of functions to assess the causal properties of an agent based on its transition probability matrix  ###
-#######################################################################################################################
+###############################################################################
+# Collection of functions to assess the causal properties of an agent based on
+# its transition probability matrix
+###############################################################################
 
 # specific utils
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def fix_TPM_dim(agent, motors=False):
-    # PathFollow agents TPMs are only specified for motors = 000 to save memory, motors do not feed back
+    # PathFollow agents TPMs are only specified for motors = 000 to save memory,
+    # motors do not feed back
     if motors is False:
         ind = np.sort(agent.sensor_ixs + agent.hidden_ixs)
         cm = np.array(agent.cm)[:, ind][ind]
@@ -39,14 +41,15 @@ def fix_TPM_dim(agent, motors=False):
 # Entropies
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def sys_entropy(agent):
-    # Just seems to be the effective info plus the entropy of the sensors, which is max ent in the TPM
+    # Just seems to be the effective info plus the entropy of the sensors, which
+    # is max ent in the TPM
     tpm, _, _ = fix_TPM_dim(agent, motors=True)
     sbs_tpm = pyphi.convert.state_by_node2state_by_state(tpm)
     avg_repertoire = np.mean(sbs_tpm, 0)
     return entropy(avg_repertoire, base=2.0)
 
 
-# Todo: fix
+# TODO: fix
 # def node_entropy(network):
 # 	avg_prob = np.mean(network.tpm.reshape([number_of_states]+[number_of_nodes], order = 'F'),0)
 

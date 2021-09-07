@@ -36,7 +36,7 @@ from . import (
 )
 from .__about__ import *  # pylint: disable=wildcard-import
 from .plotting import plot_animat_brain
-from .pyAgent import Agent, LOD
+from .pyAgent import LOD, Agent
 
 __all__ = [
     "Agent",
