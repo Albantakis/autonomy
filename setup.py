@@ -18,6 +18,7 @@ install_requires = [
     "pandas >= 1.2.4",
     "networkx >= 2.5.1",
     "pyyaml >=3.13",
+    "matplotlib >= 3.4.2",
 ]
 
 setup(
@@ -50,7 +51,5 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Topic :: Scientific/Engineering",
     ],
-    project_urls={
-        "IIT Website": "http://integratedinformationtheory.org/",
-    },
+    project_urls={"IIT Website": "http://integratedinformationtheory.org/",},
 )
