@@ -51,6 +51,8 @@ the ``fullStructuralAnalysis(agent)'' function, and likewise for a full dynamica
 or causal analysis. These functions output a pandas dataframe with all computed values.
 **Note:** the full causal analysis can be very time consuming.
 
+An example script and agent can be found in the Examples folder.
+
 ## Contact
 For any questions related to this code, and to report issues, please send an email to albantakis@wisc.edu.
 
