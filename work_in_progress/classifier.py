@@ -2,7 +2,7 @@ import math
 
 import numpy as np
 import pandas as pd
-from utils import *
+from autonomy.utils import *
 
 
 def s_m_training_data(agent, n_t=2):

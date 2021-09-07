@@ -2,11 +2,8 @@ import copy
 
 import networkx as nx
 import numpy as np
+from autonomy.utils import *
 from matplotlib import pyplot as plt
-
-# from pyBlockEnvironment import *
-from structural_agent_analysis import densely_connected_nodes
-from utils import *
 
 
 def plot_animat_brain_BC(cm, graph=None, state=None, ax=None):

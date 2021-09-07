@@ -1,9 +1,9 @@
 import networkx as nx
 import numpy as np
 import pyphi
-from plotting import *
-from structural_agent_analysis import *
-from utils import *
+from autonomy.plotting import *
+from autonomy.structural_agent_analysis import *
+from autonomy.utils import *
 
 
 class Agent:
