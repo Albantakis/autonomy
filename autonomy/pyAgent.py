@@ -78,7 +78,9 @@ class Agent:
     def _get_agent_params(self, agent_params):
         print(agent_params)
         if isinstance(agent_params, str):
-            path = str(Path(__file__).parent) + "/Phenotypes/" + agent_params + ".yml"
+            path = (Path(__file__).parent / "Phenotypes" / agent_params).with_suffix(
+                ".yaml"
+            )
             print(path)
             try:
                 version = [int(x) for x in yaml.__version__.split(".")]
