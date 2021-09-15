@@ -1,9 +1,10 @@
+# structural_agent_analysis.py
+
 import copy
 
 import networkx as nx
 import numpy as np
 import pandas as pd
-import pyphi
 from networkx.algorithms import (
     betweenness_centrality,
     degree_centrality,
@@ -12,9 +13,10 @@ from networkx.algorithms import (
 
 from .utils import get_graph
 
-#####################################################################################################################
-### Collection of functions to assess the structural properties of an agent based on its connectivity matrix (cm) ###
-#####################################################################################################################
+##############################################################################
+# Collection of functions to assess the structural properties of an agent
+# based on its connectivity matrix (cm)
+##############################################################################
 
 
 def number_of_connected_sensors(cm, sensor_ixs):

@@ -1,7 +1,9 @@
+# plotting.py
+
 import networkx as nx
 import numpy as np
 
-from .structuralAgentAnalysis import densely_connected_nodes
+from .structural_agent_analysis import densely_connected_nodes
 from .utils import *
 
 

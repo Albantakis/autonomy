@@ -1,3 +1,5 @@
+# information_agent_analysis.py
+
 from itertools import combinations
 
 from pyphi import convert
@@ -5,12 +7,13 @@ from scipy.stats import entropy
 
 from .utils import *
 
-#####################################################################################################################
-### Collection of functions to assess the information theoretical properties of an agent based on its activity 	  ###
+###############################################################################
+# Collection of functions to assess the information theoretical properties of
+# an agent based on its activity
+###############################################################################
 
-# Todo: implement checks that n_t is within the correct range
+# TODO: implement checks that n_t is within the correct range
 
-#####################################################################################################################
 
 # Entropies
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -78,9 +81,11 @@ def IC(agent):
 
 
 def NTIC_m(agent, n_t=5):
-    # Nontrivial information closure considering m time steps of the environment (here sensors)
+    # Nontrivial information closure considering m time steps of the environment
+    # (here sensors)
     # A^* = A_m + NTIC_m  --> NTIC_m = A^* - A_m with A^* = I_PRED
-    # Supposedly the degree with which the system models the environment (but can be positive for FF systems)
+    # Supposedly the degree with which the system models the environment (but
+    # can be positive for FF systems)
     return I_PRED(agent, n_t=1, noSen=True) - A_m_sensors(agent, n_t=n_t)
 
 
@@ -135,7 +140,9 @@ def A_m_sensors(agent, n_t=5):
     )
     prob_cond_2 = count / sum(count)
 
-    # print(entropy(prob_joint_2) - entropy(prob_cond_2)) #This should be zero in deterministic system, but is not because different distributions are used to compute the entropies.
+    # # This should be zero in deterministic system, but is not because different
+    # # distributions are used to compute the entropies.
+    # print(entropy(prob_joint_2) - entropy(prob_cond_2))
     A_m = (
         entropy(prob_joint_1, base=2)
         - entropy(prob_cond_1, base=2)

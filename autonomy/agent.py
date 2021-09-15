@@ -1,16 +1,21 @@
+# agent.py
+
 import json
 from collections import UserDict
 from copy import deepcopy
 from pathlib import Path
+from pprint import pformat
+from textwrap import indent
 
 import pyphi
 import yaml
 
 from .plotting import *
-from .structuralAgentAnalysis import LSCC
+from .structural_agent_analysis import LSCC
 from .utils import *
 
-### This is the general agent object based on a TPM and (inferred) CM and nothing else necessary.
+# This is the general agent object based on a TPM and (inferred) CM and nothing
+# else necessary.
 
 
 class LOD(UserDict):
@@ -42,11 +47,23 @@ class Agent:
         LOD
     """
 
+    # Attributes to display in the string representation of the agent
+    DISPLAY_ATTRIBUTES = [
+        "n_nodes",
+        "n_sensors",
+        "n_hidden",
+        "n_motors",
+        "sensor_ixs",
+        "hidden_ixs",
+        "motor_ixs",
+        "cm",
+    ]
+
     def __init__(
         self, tpm, cm=None, activity=None, params=None, add_attr=None, LOD_dict=None
     ):
         """
-        Called by pyAgents.Agent(...)
+        Called by agent.Agent(...)
 
         Keyword Args:
             agent_params: either string that leads to yml file with parameters or dictionary of parameters.
@@ -69,12 +86,15 @@ class Agent:
         self.activity = activity
         self.n_nodes = len(tpm[1])
 
-        # TODO: Test that TPM dimsensions and sensor, motor indices, num nodes all fit together
+        # TODO: Test that TPM dimsensions and sensor, motor indices, num nodes
+        # all fit together
 
     def _get_agent_params(self, agent_params):
         print(agent_params)
         if isinstance(agent_params, str):
-            path = str(Path(__file__).parent) + "/Phenotypes/" + agent_params + ".yml"
+            path = (Path(__file__).parent / "phenotypes" / agent_params).with_suffix(
+                ".yaml"
+            )
             print(path)
             try:
                 version = [int(x) for x in yaml.__version__.split(".")]
@@ -92,6 +112,17 @@ class Agent:
             params = agent_params
 
         self.__dict__.update(params)
+
+    def __repr__(self):
+        display_attrs = {
+            key: self.__dict__[key]
+            for key in self.DISPLAY_ATTRIBUTES
+            if key in self.__dict__
+        }
+        return f"Agent(\n{indent(pformat(display_attrs, sort_dicts=False), '  ')})"
+
+    def __str__(self):
+        return repr(self)
 
     def _infer_cm(self):
         return pyphi.tpm.infer_cm(pyphi.convert.to_multidimensional(self.tpm))
@@ -125,15 +156,17 @@ class Agent:
         dct["LOD_dict"] = dct.pop("LOD")
         # Convert dataframes
         for key, value in dct.items():
-            if key == 'activity' or key.endswith('_analysis'):
+            if key == "activity" or key.endswith("_analysis"):
                 dct[key] = pd.DataFrame.from_dict(value)
 
         # Extract constructor arguments
-        if 'LOD' in dct:
-            dct['LOD_dict'] = dct.pop('LOD')
+        if "LOD" in dct:
+            dct["LOD_dict"] = dct.pop("LOD")
         kwargs = {
             kwarg: dct.pop(kwarg)
-            for kwarg in filter(lambda key: key in dct, ['tpm', 'cm', 'activity', 'LOD_dict'])
+            for kwarg in filter(
+                lambda key: key in dct, ["tpm", "cm", "activity", "LOD_dict"]
+            )
         }
 
         # Construct the agent
@@ -172,18 +205,16 @@ class Agent:
             return cls.from_dict(json.load(f))
 
     @classmethod
-    def load_example_agent(cls, agent_name = 'A2_C0___28_149'):
+    def load_example_agent(cls, agent_name="A2_C0___28_149"):
         if isinstance(agent_name, str):
-            path = str(Path(__file__).parent) + "/Examples/" + agent_name + ".json"
+            path = str(Path(__file__).parent) + "/examples/" + agent_name + ".json"
             print(path)
             try:
-                agent = cls.read(path)        
+                agent = cls.read(path)
                 return agent
-                    
+
             except FileNotFoundError:
                 print("No example agent to load.")
-
-        
 
     # -------------------- PLOTTING --------------------------------------
 

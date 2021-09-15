@@ -1,37 +1,41 @@
-import pyphi
-import numpy as np
 import networkx as nx
+import numpy as np
+import pyphi
+from autonomy.plotting import *
+from autonomy.structural_agent_analysis import *
+from autonomy.utils import *
 
-from plotting import *
-from utils import *
-from structuralAgentAnalysis import *
 
 class Agent:
-    '''
+    """
     This class contains functions concerning the agent to be analyzed
-    '''
+    """
 
     def __init__(self, params):
-        '''
+        """
         Function for initializing the agent.
-        Called by pyAgents.Agent(params)
+        Called by agents.Agent(params)
             Inputs:
                 params: a dictionary containing the defining parameters of the agent. The minimal input is {}
             Outputs:
                 updates the agent object (self) directly
-        '''
+        """
 
         # checking if params contains the right keys, else using standard values
-        self.n_left_sensors = params['nrOfLeftSensors'] if 'nrOfLeftSensors' in params else 1
-        self.n_right_sensors = params['nrOfRightSensors'] if 'nrOfRightSensors' in params else 1
-        self.n_hidden = params['hiddenNodes'] if 'hiddenNodes' in params else 4
-        self.n_motors = params['motorNodes'] if 'motorNodes' in params else 2
-        self.gapwidth = params['gapWidth'] if 'gapWidth' in params else 1
+        self.n_left_sensors = (
+            params["nrOfLeftSensors"] if "nrOfLeftSensors" in params else 1
+        )
+        self.n_right_sensors = (
+            params["nrOfRightSensors"] if "nrOfRightSensors" in params else 1
+        )
+        self.n_hidden = params["hiddenNodes"] if "hiddenNodes" in params else 4
+        self.n_motors = params["motorNodes"] if "motorNodes" in params else 2
+        self.gapwidth = params["gapWidth"] if "gapWidth" in params else 1
         self.n_sensors = self.n_right_sensors + self.n_left_sensors
         self.n_nodes = self.n_sensors + self.n_hidden + self.n_motors
-        self.length = self.n_left_sensors  + self.gapwidth + self.n_right_sensors
-        self.x = params['x'] if 'x' in params else 0
-        self.y = params['y'] if 'y' in params else 0
+        self.length = self.n_left_sensors + self.gapwidth + self.n_right_sensors
+        self.x = params["x"] if "x" in params else 0
+        self.y = params["y"] if "y" in params else 0
 
     def __len__(self):
         # size of agent in world
@@ -45,7 +49,9 @@ class Agent:
         # function for setting the current y position of the agent
         self.y = position
 
-    def create_agent(tpm, cm, brain_activity, fitness = 0., task = None, id_label = None, params = {}):
+    def create_agent(
+        tpm, cm, brain_activity, fitness=0.0, task=None, id_label=None, params={}
+    ):
 
         agent = Agent(params)
         agent.save_brain(tpm, cm)
@@ -65,7 +71,7 @@ class Agent:
         self.fitness = fitness
 
     def save_brain(self, TPM, cm, node_labels=[]):
-        '''
+        """
         Function for giving the agent a brain (pyphi network) and a graph object
             Inputs:
                 TPM: a transition probability matrix readable for pyPhi
@@ -73,13 +79,24 @@ class Agent:
                 node_labels: list of labels for nodes (if empty, standard labels are used)
             Outputs:
                 no output, just an update of the agent object
-        '''
-        if not len(node_labels)==self.n_nodes:
+        """
+        if not len(node_labels) == self.n_nodes:
             node_labels = []
             # standard labels for up to 10 nodes of each kind
-            sensor_labels = ['S1','S2','S3','S4','S5','S6','S7','S8','S9','S10']
-            motor_labels = ['M1','M2','M3','M4','M5','M6','M7','M8','M9','M10']
-            hidden_labels = ['A','B','C','D','E','F','G','H','I','J']
+            sensor_labels = [
+                "S1",
+                "S2",
+                "S3",
+                "S4",
+                "S5",
+                "S6",
+                "S7",
+                "S8",
+                "S9",
+                "S10",
+            ]
+            motor_labels = ["M1", "M2", "M3", "M4", "M5", "M6", "M7", "M8", "M9", "M10"]
+            hidden_labels = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
 
             # defining labels for each node type
             s = [sensor_labels[i] for i in list(range(self.n_sensors))]
@@ -96,11 +113,11 @@ class Agent:
         self.brain = network
         self.TPM = TPM
         self.cm = cm
-        self.connected_nodes = sum(np.sum(cm,0)*np.sum(cm,1)>0)
-        
+        self.connected_nodes = sum(np.sum(cm, 0) * np.sum(cm, 1) > 0)
+
         # defining a graph object based on the connectivity using networkx
         G = nx.from_numpy_matrix(cm, create_using=nx.DiGraph())
-        mapping = {key:x for key,x in zip(range(self.n_nodes),node_labels)}
+        mapping = {key: x for key, x in zip(range(self.n_nodes), node_labels)}
         G = nx.relabel_nodes(G, mapping)
         self.brain_graph = G
         self.len_LSCC = len_LSCC(G)
@@ -109,50 +126,57 @@ class Agent:
         self.node_labels = node_labels
         self.sensor_ixs = list(range(self.n_sensors))
         self.sensor_labels = [node_labels[i] for i in self.sensor_ixs]
-        self.motor_ixs = list(range(self.n_sensors,self.n_sensors+self.n_motors))
+        self.motor_ixs = list(range(self.n_sensors, self.n_sensors + self.n_motors))
         self.motor_labels = [node_labels[i] for i in self.motor_ixs]
-        self.hidden_ixs = list(range(self.n_sensors+self.n_motors,self.n_sensors+self.n_motors+self.n_hidden))
+        self.hidden_ixs = list(
+            range(
+                self.n_sensors + self.n_motors,
+                self.n_sensors + self.n_motors + self.n_hidden,
+            )
+        )
         self.hidden_labels = [node_labels[i] for i in self.hidden_ixs]
 
-    def save_brain_activity(self,brain_activity):
-        '''
+    def save_brain_activity(self, brain_activity):
+        """
         Function for saving brain activity to agent object
             Inputs:
                 brain activity as 3D array (trials x times x nodes)
             Outputs:
                 no output, just an update of the Agent object
-        '''
-        assert brain_activity.shape[2]==self.n_nodes, "Brain history does not match number of nodes = {}".format(self.n_nodes)
+        """
+        assert (
+            brain_activity.shape[2] == self.n_nodes
+        ), "Brain history does not match number of nodes = {}".format(self.n_nodes)
         self.brain_activity = np.array(brain_activity).astype(int)
         self.n_trials = brain_activity.shape[0]
         self.n_timesteps = brain_activity.shape[1]
 
     def get_motor_activity(self, trial):
-        '''
+        """
         Function for getting the motor activity from a system's activity
         ### THIS FUNCTION ONLY WORKS FOR SYSTEMS WITH TWO SENSORS ###
             Inputs:
                 trial: int, the trial number under investigation
             Outputs:
                 motor_activity: list of movements made by the animat in a trial
-        '''
+        """
         trial_activity = self.brain_activity[trial]
         motor_states = trial_activity[:, self.motor_ixs]
         motor_activity = []
         for state in motor_states:
             state = list(state)
-            if state==[0,0] or state==[1,1]:
+            if state == [0, 0] or state == [1, 1]:
                 motor_activity.append(0)
-            elif state==[1,0]:
+            elif state == [1, 0]:
                 motor_activity.append(1)
-            else: # state==[0,1]
+            else:  # state==[0,1]
                 motor_activity.append(-1)
         return motor_activity
 
-# -------------------- PLOTTING --------------------------------------
+    # -------------------- PLOTTING --------------------------------------
 
     def plot_brain(self, state=None, ax=None):
-        '''
+        """
         Function for plotting the brain of an animat.
         ### THIS FUNCTION ONLY WORKS WELL FOR ANIMATS WITH 7 or 8 NODES (2+2+4) ###
             Inputs:
@@ -161,5 +185,5 @@ class Agent:
 
             Outputs:
                 no output, just calls plotting.py function for plotting
-        '''
+        """
         plot_animat_brain(self.brain.cm, self.brain_graph, state, ax)
