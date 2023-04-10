@@ -38,7 +38,7 @@ def get_node_labels(agent):
 
 def get_graph(agent):
     # defining a graph object based on the connectivity using networkx
-    G = nx.from_numpy_matrix(np.array(agent.cm), create_using=nx.DiGraph())
+    G = nx.from_numpy_array(np.array(agent.cm), create_using=nx.DiGraph())
     node_labels = get_node_labels(agent)
     mapping = {key: x for key, x in zip(range(agent.n_nodes), node_labels)}
     G = nx.relabel_nodes(G, mapping)

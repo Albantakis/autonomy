@@ -86,7 +86,7 @@ def plot_animat_brain(agent, state=None, ax=None):
 
     flipped_pos = {node: (-x, -y) for (node, (x, y)) in pos.items()}
 
-    nx.draw(
+    nx.draw_networkx(
         G,
         with_labels=True,
         node_size=800,

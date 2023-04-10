@@ -165,7 +165,7 @@ def fullStructuralAnalysis(agent, connected_only=True, save_agent=False):
         ind_con = connected_nodes(agent)
         if len(ind_con) > 0:
             cm_connected = cm[np.ix_(ind_con, ind_con)]
-            G = nx.from_numpy_matrix(cm_connected, create_using=nx.DiGraph())
+            G = nx.from_numpy_array(cm_connected, create_using=nx.DiGraph())
         else:
             G = nx.empty_graph(n=0, create_using=nx.DiGraph())
     else:
