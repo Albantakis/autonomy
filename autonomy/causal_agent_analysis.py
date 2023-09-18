@@ -153,39 +153,42 @@ def alpha_ratio_hidden(agent):
             transition, direction=pyphi.direction.Direction.CAUSE
         )
 
-        sum_alpha = sum([d.alpha for d in account])
+        if not account:
+            hidden_alpha_ratio.append(0)
+        else:
+            sum_alpha = sum([d.alpha for d in account])
 
-        sum_alpha_hidden = 0
-        for d in account:
-            # extended purviews outputs all tied actual causes
-            purviews = d.extended_purview
-            sum_alpha_hidden_purview = 0
+            sum_alpha_hidden = 0
+            for d in account:
+                # extended purviews outputs all tied actual causes
+                purviews = d.extended_purview
+                sum_alpha_hidden_purview = 0
 
-            for pur in purviews:
-                hidden_purview_idx = np.array(
-                    [c for c, p in enumerate(pur) if p in agent.hidden_ixs]
-                )
-
-                if len(hidden_purview_idx) == len(pur):
-                    # if all purview nodes are hidden, add total alpha
-                    sum_alpha_hidden_purview = sum_alpha_hidden_purview + d.alpha
-
-                elif len(hidden_purview_idx) > 0:
-                    # TODO: improve, only compute for the hidden nodes
-                    shapley_values = np.array(
-                        compute_shapley_values(d, transition, pur)
-                    )
-                    sum_alpha_hidden_purview = sum_alpha_hidden_purview + sum(
-                        shapley_values[hidden_purview_idx]
+                for pur in purviews:
+                    hidden_purview_idx = np.array(
+                        [c for c, p in enumerate(pur) if p in agent.hidden_ixs]
                     )
 
-            # If there are multiple equivalent purviews, get average hidden contribution
-            sum_alpha_hidden_purview = sum_alpha_hidden_purview / len(purviews)
+                    if len(hidden_purview_idx) == len(pur):
+                        # if all purview nodes are hidden, add total alpha
+                        sum_alpha_hidden_purview = sum_alpha_hidden_purview + d.alpha
 
-            sum_alpha_hidden = sum_alpha_hidden + sum_alpha_hidden_purview
+                    elif len(hidden_purview_idx) > 0:
+                        # TODO: improve, only compute for the hidden nodes
+                        shapley_values = np.array(
+                            compute_shapley_values(d, transition, pur)
+                        )
+                        sum_alpha_hidden_purview = sum_alpha_hidden_purview + sum(
+                            shapley_values[hidden_purview_idx]
+                        )
 
-        hidden_alpha_ratio.append(sum_alpha_hidden / sum_alpha)
+                # If there are multiple equivalent purviews, get average hidden contribution
+                sum_alpha_hidden_purview = sum_alpha_hidden_purview / len(purviews)
 
+                sum_alpha_hidden = sum_alpha_hidden + sum_alpha_hidden_purview
+         
+            hidden_alpha_ratio.append(sum_alpha_hidden / sum_alpha)
+    
     average_hidden_alpha_ratio = sum(hidden_alpha_ratio * probs)
 
     return average_hidden_alpha_ratio
