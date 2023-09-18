@@ -93,7 +93,7 @@ class Agent:
         print(agent_params)
         if isinstance(agent_params, str):
             path = (Path(__file__).parent / "phenotypes" / agent_params).with_suffix(
-                ".yaml"
+                ".yml"
             )
             print(path)
             try:
