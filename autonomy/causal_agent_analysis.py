@@ -194,7 +194,7 @@ def alpha_ratio_hidden(agent):
     return average_hidden_alpha_ratio
 
 
-def transition_alpha_ratio(agent):
+def transition_alpha_cause(agent):
     tpm, cm, _ = fix_TPM_dim(agent, motors=True)
 
     ind_hs = tuple(agent.hidden_ixs + agent.sensor_ixs)
@@ -255,6 +255,76 @@ def transition_alpha_ratio(agent):
             alpha_ratio_transition.append(alpha_ratio / sum_alpha)
     
     return alpha_ratio_transition
+
+
+def transition_alpha_effect(agent):
+    tpm, cm, _ = fix_TPM_dim(agent, motors=True)
+
+    # different：
+    ind_s = tuple(agent.sensor_ixs)
+    ind_hm = tuple(agent.hidden_ixs + agent.motor_ixs)
+
+    transitions, _ = get_unique_transitions(
+        agent, return_counts=True, node_ind_pair=None, n_t=1
+    )
+
+    network = pyphi.Network(tpm, cm=cm)
+
+    alpha_ratio_transition = []
+    for _, trans in enumerate(transitions):
+        trans = np.array(trans)
+        transition = pyphi.Transition(
+            network,
+            trans[:agent.n_nodes],
+            trans[agent.n_nodes:2 * agent.n_nodes],
+            # different：
+            ind_s,
+            ind_hm,
+        )
+
+        account = pyphi.actual.account(
+            transition, direction=pyphi.direction.Direction.EFFECT # different
+        )
+
+        if not account:
+            alpha_ratio_transition.append(np.zeros(len(ind_s) + len(ind_hm))) # different
+        else:
+            sum_alpha = sum([d.alpha for d in account])
+
+            alpha_ratio = np.zeros(len(ind_s) + len(ind_hm)) # different
+            for d in account:
+                # extended purviews outputs all tied actual causes
+                purviews = d.extended_purview
+                alpha_purview = np.zeros(len(ind_s) + len(ind_hm)) # different
+
+                for pur in purviews:
+
+                    for c, p in enumerate(pur):
+                        purview_idx = np.array([p])
+                    
+                        if len(purview_idx) == len(pur):
+                            alpha_purview[p] += d.alpha
+
+                        elif len(purview_idx) > 0:
+
+                            shapley_values = np.array(
+                                compute_shapley_values(d, transition, pur)
+                            )
+                            alpha_purview[p] += shapley_values[c]
+                           
+                # If there are multiple equivalent purviews, get average hidden contribution
+                alpha_purview = alpha_purview / len(purviews)
+
+                alpha_ratio += alpha_purview
+         
+            alpha_ratio_transition.append(alpha_ratio / sum_alpha)
+
+    # different：
+    hidden_motor_effect = []
+    for transition in alpha_ratio_transition:
+        hidden_motor_effect.append(np.array([item for idx, item in enumerate(transition) if idx not in agent.sensor_ixs]))
+        
+    return hidden_motor_effect
 
 
 # IIT
