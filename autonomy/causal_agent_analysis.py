@@ -134,6 +134,7 @@ def alpha_ratio_hidden(agent):
     transitions, counts = get_unique_transitions(
         agent, return_counts=True, node_ind_pair=None, n_t=1
     )
+
     probs = counts / sum(counts)
 
     network = pyphi.Network(tpm, cm=cm)
@@ -188,10 +189,10 @@ def alpha_ratio_hidden(agent):
                 sum_alpha_hidden = sum_alpha_hidden + sum_alpha_hidden_purview
          
             hidden_alpha_ratio.append(sum_alpha_hidden / sum_alpha)
-    
-    average_hidden_alpha_ratio = sum(hidden_alpha_ratio * probs)
 
-    return average_hidden_alpha_ratio
+    alpha = sum(hidden_alpha_ratio * probs) # average_hidden_alpha_ratio
+    
+    return alpha
 
 
 def transition_alpha_cause(agent):
@@ -256,21 +257,22 @@ def transition_alpha_cause(agent):
     
     return alpha_ratio_transition
 
-
-def transition_alpha_effect(agent):
+def transition_alpha_symbol_effect(agent):
     tpm, cm, _ = fix_TPM_dim(agent, motors=True)
 
     # different：
-    ind_s = tuple(agent.sensor_ixs)
+    ind_sym = tuple([agent.sensor_ixs[-1]])
     ind_hm = tuple(agent.hidden_ixs + agent.motor_ixs)
 
     transitions, _ = get_unique_transitions(
         agent, return_counts=True, node_ind_pair=None, n_t=1
     )
 
+    #probs = counts / sum(counts)
+
     network = pyphi.Network(tpm, cm=cm)
 
-    alpha_ratio_transition = []
+    alpha_effect_ratio = []
     for _, trans in enumerate(transitions):
         trans = np.array(trans)
         transition = pyphi.Transition(
@@ -278,7 +280,7 @@ def transition_alpha_effect(agent):
             trans[:agent.n_nodes],
             trans[agent.n_nodes:2 * agent.n_nodes],
             # different：
-            ind_s,
+            ind_sym,
             ind_hm,
         )
 
@@ -287,44 +289,13 @@ def transition_alpha_effect(agent):
         )
 
         if not account:
-            alpha_ratio_transition.append(np.zeros(len(ind_s) + len(ind_hm))) # different
+            alpha_effect_ratio.append(0) # different
         else:
-            sum_alpha = sum([d.alpha for d in account])
+            alpha_effect_ratio.append(sum([d.alpha for d in account]))
 
-            alpha_ratio = np.zeros(len(ind_s) + len(ind_hm)) # different
-            for d in account:
-                # extended purviews outputs all tied actual causes
-                purviews = d.extended_purview
-                alpha_purview = np.zeros(len(ind_s) + len(ind_hm)) # different
+    #alpha_effect = sum(alpha_effect_ratio * probs) # different
 
-                for pur in purviews:
-
-                    for c, p in enumerate(pur):
-                        purview_idx = np.array([p])
-                    
-                        if len(purview_idx) == len(pur):
-                            alpha_purview[p] += d.alpha
-
-                        elif len(purview_idx) > 0:
-
-                            shapley_values = np.array(
-                                compute_shapley_values(d, transition, pur)
-                            )
-                            alpha_purview[p] += shapley_values[c]
-                           
-                # If there are multiple equivalent purviews, get average hidden contribution
-                alpha_purview = alpha_purview / len(purviews)
-
-                alpha_ratio += alpha_purview
-         
-            alpha_ratio_transition.append(alpha_ratio / sum_alpha)
-
-    # different：
-    hidden_motor_effect = []
-    for transition in alpha_ratio_transition:
-        hidden_motor_effect.append(np.array([item for idx, item in enumerate(transition) if idx not in agent.sensor_ixs]))
-        
-    return hidden_motor_effect
+    return alpha_effect_ratio
 
 
 # IIT
