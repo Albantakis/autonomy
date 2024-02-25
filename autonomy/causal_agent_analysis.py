@@ -298,6 +298,90 @@ def transition_alpha_symbol_effect(agent):
     return alpha_effect_ratio
 
 
+def purview_cause(agent):
+    tpm, cm, _ = fix_TPM_dim(agent, motors=True)
+
+    ind_hs = tuple(agent.hidden_ixs + agent.sensor_ixs)
+    ind_m = tuple(agent.motor_ixs)
+
+    transitions, _ = get_unique_transitions(
+        agent, return_counts=True, node_ind_pair=None, n_t=1
+    )
+
+    network = pyphi.Network(tpm, cm=cm)
+
+    purview_size = []
+    for _, trans in enumerate(transitions):
+        trans = np.array(trans)
+        transition = pyphi.Transition(
+            network,
+            trans[:agent.n_nodes],
+            trans[agent.n_nodes:2 * agent.n_nodes],
+            ind_hs,
+            ind_m,
+        )
+
+        account = pyphi.actual.account(
+            transition, direction=pyphi.direction.Direction.CAUSE
+        )
+
+        if not account:
+            purview_size.append(0)
+        else:
+            pur_elements = set()
+            for d in account:
+                purviews = d.extended_purview
+                for pur in purviews:
+                    pur_elements.update(pur)
+
+            purview_size.append(len(list(pur_elements)))
+    
+    return purview_size
+
+
+def purview_symbol_effect(agent):
+    tpm, cm, _ = fix_TPM_dim(agent, motors=True)
+
+    # different：
+    ind_sym = tuple([agent.sensor_ixs[-1]])
+    ind_hm = tuple(agent.hidden_ixs + agent.motor_ixs)
+
+    transitions, _ = get_unique_transitions(
+        agent, return_counts=True, node_ind_pair=None, n_t=1
+    )
+
+    network = pyphi.Network(tpm, cm=cm)
+
+    purview_size = []
+    for _, trans in enumerate(transitions):
+        trans = np.array(trans)
+        transition = pyphi.Transition(
+            network,
+            trans[:agent.n_nodes],
+            trans[agent.n_nodes:2 * agent.n_nodes],
+            # different：
+            ind_sym,
+            ind_hm,
+        )
+
+        account = pyphi.actual.account(
+            transition, direction=pyphi.direction.Direction.EFFECT # different
+        )
+
+        if not account:
+            purview_size.append(0) # different
+        else:
+            pur_elements = set()
+            for d in account:
+                purviews = d.extended_purview
+                for pur in purviews:
+                    pur_elements.update(pur)
+
+            purview_size.append(len(list(pur_elements)))
+
+    return purview_size
+
+
 # IIT
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def sum_of_small_phi_full_system(agent, save_agent=False):
