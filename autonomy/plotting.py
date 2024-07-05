@@ -88,6 +88,16 @@ def plot_animat_brain(agent, state=None, ax=None):
 
     flipped_pos = {node: (-x, -y) for (node, (x, y)) in pos.items()}
 
+    fig, ax = plt.subplots(figsize=(9, 7))
+
+    title_font = {
+        'color':  'black',
+        'weight': 'bold',
+        'size': 27
+    }
+
+    ax.text(0, 1.2, 'A. Example Connectome', transform=ax.transAxes, fontdict=title_font, ha='left', va='bottom')  
+
     nx.draw_networkx(
         G,
         with_labels=True,
@@ -98,6 +108,9 @@ def plot_animat_brain(agent, state=None, ax=None):
         pos=flipped_pos,
         ax=ax,
     )
+
+    fig.savefig('agent_connectome.pdf', bbox_inches='tight')
+
 
 def plot_animat_brain_state(agent, row_idx, ax=None):
     n_nodes = agent.n_nodes
@@ -116,10 +129,27 @@ def plot_animat_brain_state(agent, row_idx, ax=None):
 
     hidden_colors = [mcolors.to_hex(alpha_color_scale(val)) if val != 0  else "#FFFFFF" for val in hidden_alpha]
     sensor_colors = [mcolors.to_hex(alpha_color_scale(val)) if val != 0  else "#FFFFFF" for val in sensor_alpha]
-    motor_colors = ["#ffffff"] * agent.n_motors
+
+    motor_values = agent.Causal_Profile_Unsorted[row_idx, 19:22]
+    motor_colors = ["#6badf9" if val != 0 else "#FFFFFF" for val in motor_values]
+    # motor_colors = ["#ffffff"] * agent.n_motors
     node_colors = hidden_colors + sensor_colors + motor_colors
 
+    connected_nodes = (
+        list(densely_connected_nodes(cm)) + agent.motor_ixs + agent.sensor_ixs
+    )
+    node_colors = [
+        node_colors[i] if i in connected_nodes else "#adadad"
+        for i in range(n_nodes)
+    ]
+
     node_labels = np.array(G.nodes)
+
+    isolates = [x for x in nx.isolates(G)]
+    node_colors = [
+        node_colors[i] if node_labels[i] not in isolates else "#FFFFFF"
+        for i in range(n_nodes)
+    ]
 
     # indicate self-loops by thick lines
     self_nodes_ixs = [i for i in range(n_nodes) if cm[i, i] == 1]
@@ -166,3 +196,5 @@ def plot_animat_brain_state(agent, row_idx, ax=None):
         pos=flipped_pos,
         ax=ax,
     )
+
+
