@@ -5,6 +5,7 @@ import itertools
 import numpy as np
 import pyphi
 from scipy.stats import entropy
+from structural_agent_analysis import densely_connected_nodes
 
 from .shapley_values import compute_shapley_values
 from .utils import *
@@ -127,7 +128,8 @@ def alpha_ratio_hidden(agent):
     tpm, cm, _ = fix_TPM_dim(agent, motors=True)
 
     # TODO: once it is possible to define node specific transitions in pyphi, improve
-    ind_hs = tuple(agent.hidden_ixs + agent.sensor_ixs)
+    ind_h = list(densely_connected_nodes(agent.cm))
+    ind_hs = tuple(ind_h + agent.sensor_ixs)
     ind_m = tuple(agent.motor_ixs)
     # node_ind_pair = [ind_hs, ind_m]
 
@@ -198,7 +200,8 @@ def alpha_ratio_hidden(agent):
 def transition_alpha_cause(agent):
     tpm, cm, _ = fix_TPM_dim(agent, motors=True)
 
-    ind_hs = tuple(agent.hidden_ixs + agent.sensor_ixs)
+    ind_h = list(densely_connected_nodes(agent.cm))
+    ind_hs = tuple(ind_h + agent.sensor_ixs)
     ind_m = tuple(agent.motor_ixs)
 
     transitions, _ = get_unique_transitions(
@@ -262,7 +265,8 @@ def transition_alpha_symbol_effect(agent):
 
     # different：
     ind_sym = tuple([agent.sensor_ixs[-1]])
-    ind_hm = tuple(agent.hidden_ixs + agent.motor_ixs)
+    ind_h = list(densely_connected_nodes(agent.cm))
+    ind_hm = tuple(ind_h + agent.motor_ixs)
 
     transitions, _ = get_unique_transitions(
         agent, return_counts=True, node_ind_pair=None, n_t=1
@@ -301,7 +305,8 @@ def transition_alpha_symbol_effect(agent):
 def purview_cause(agent):
     tpm, cm, _ = fix_TPM_dim(agent, motors=True)
 
-    ind_hs = tuple(agent.hidden_ixs + agent.sensor_ixs)
+    ind_h = list(densely_connected_nodes(agent.cm))
+    ind_hs = tuple(ind_h + agent.sensor_ixs)
     ind_m = tuple(agent.motor_ixs)
 
     transitions, _ = get_unique_transitions(
@@ -344,7 +349,9 @@ def purview_symbol_effect(agent):
 
     # different：
     ind_sym = tuple([agent.sensor_ixs[-1]])
-    ind_hm = tuple(agent.hidden_ixs + agent.motor_ixs)
+    ind_h = list(densely_connected_nodes(agent.cm))
+    ind_hm = tuple(ind_h + agent.motor_ixs)
+
 
     transitions, _ = get_unique_transitions(
         agent, return_counts=True, node_ind_pair=None, n_t=1
