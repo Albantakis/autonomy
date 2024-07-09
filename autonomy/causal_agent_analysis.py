@@ -202,6 +202,7 @@ def transition_alpha_cause(agent):
 
     ind_h = list(densely_connected_nodes(agent.cm))
     ind_hs = tuple(ind_h + agent.sensor_ixs)
+    len_hs_total = agent.n_hidden + agent.n_sensors
     ind_m = tuple(agent.motor_ixs)
 
     transitions, _ = get_unique_transitions(
@@ -226,15 +227,15 @@ def transition_alpha_cause(agent):
         )
 
         if not account:
-            alpha_ratio_transition.append(np.zeros(len(ind_hs)))
+            alpha_ratio_transition.append(np.zeros(len_hs_total))
         else:
             sum_alpha = sum([d.alpha for d in account])
 
-            alpha_ratio = np.zeros(len(ind_hs))
+            alpha_ratio = np.zeros(len_hs_total)
             for d in account:
                 # extended purviews outputs all tied actual causes
                 purviews = d.extended_purview
-                alpha_purview = np.zeros(len(ind_hs))
+                alpha_purview = np.zeros(len_hs_total)
 
                 for pur in purviews:
 
