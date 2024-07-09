@@ -5,8 +5,8 @@ import itertools
 import numpy as np
 import pyphi
 from scipy.stats import entropy
-from structural_agent_analysis import densely_connected_nodes
 
+from .structural_agent_analysis import densely_connected_nodes
 from .shapley_values import compute_shapley_values
 from .utils import *
 
